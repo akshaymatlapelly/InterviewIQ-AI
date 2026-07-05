@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Switch } from './ui/Switch';
 import { Button } from './ui/Button';
 import { Label } from './ui/Label';
@@ -49,7 +49,7 @@ export default function ReminderSettings() {
     try {
       const emailHtml = `
         <div style="background-color: #0b0c16; color: #f1f3f9; padding: 24px; font-family: sans-serif; max-width: 600px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
-          <h2 style="color: #8b5cf6; font-size: 24px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">🧠 InterviewIQ AI Reminder</h2>
+          <h2 style="color: #8b5cf6; font-size: 24px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">ðŸ§  InterviewIQ AI Reminder</h2>
           <p style="font-size: 16px; line-height: 1.5; color: #cbd5e1;">Hello ${user.full_name || 'Candidate'},</p>
           <p style="font-size: 15px; line-height: 1.5; color: #cbd5e1;">This is your scheduled practice reminder from InterviewIQ AI. Regular mock interviews build fluency, grammar, and technical vocabulary.</p>
           <div style="margin: 24px 0; text-align: center;">
@@ -59,9 +59,9 @@ export default function ReminderSettings() {
         </div>
       `;
 
-      await base44.integrations.Core.SendEmail({
+      await iqClient.integrations.Core.SendEmail({
         to: user.email,
-        subject: "Time for your Daily Interview Practice! 🧠 | InterviewIQ AI",
+        subject: "Time for your Daily Interview Practice! ðŸ§  | InterviewIQ AI",
         html: emailHtml
       });
       toast.success("Practice test reminder email sent to: " + user.email);
@@ -119,3 +119,4 @@ export default function ReminderSettings() {
   );
 }
 export { ReminderSettings };
+

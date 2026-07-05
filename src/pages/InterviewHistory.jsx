@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Button } from '../components/ui/Button';
 import { 
   LineChart, 
@@ -40,7 +40,7 @@ export default function InterviewHistory() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const list = await base44.entities.Interview.list();
+        const list = await iqClient.entities.Interview.list();
         const completed = (list || [])
           .filter(i => i.status === 'completed' && i.created_by === user?.email)
           .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
@@ -67,7 +67,7 @@ export default function InterviewHistory() {
 
   return (
     <div className="space-y-8 pt-4 pb-10">
-      {/* ── MY GROWTH JOURNEY SECTION ───────────────────────────────────── */}
+      {/* â”€â”€ MY GROWTH JOURNEY SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {interviews.length > 0 && (
         <div className="space-y-6">
           {/* Header */}
@@ -307,3 +307,4 @@ export default function InterviewHistory() {
   );
 }
 export { InterviewHistory };
+

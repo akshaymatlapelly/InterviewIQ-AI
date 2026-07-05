@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { base44 } from '../api/base44Client';
+﻿import React, { useState } from 'react';
+import { iqClient } from '../api/iqClient';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/Dialog';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
@@ -48,7 +48,7 @@ export default function ShareReportButton({ interview, feedback }) {
 
       const emailHtml = `
         <div style="background-color: #0b0c16; color: #f1f3f9; padding: 32px; font-family: sans-serif; max-width: 600px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); margin: 0 auto;">
-          <h2 style="color: #8b5cf6; font-size: 26px; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; text-align: center;">🧠 InterviewIQ AI</h2>
+          <h2 style="color: #8b5cf6; font-size: 26px; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; text-align: center;">ðŸ§  InterviewIQ AI</h2>
           <h3 style="color: #ffffff; text-align: center; margin-top: 16px; font-size: 18px;">Mock Interview Performance Report</h3>
           <p style="color: #64748b; text-align: center; margin-top: 4px; font-size: 14px;">Role: <strong>${interview.job_role || 'General candidate'}</strong></p>
           
@@ -70,7 +70,7 @@ export default function ShareReportButton({ interview, feedback }) {
           <!-- Strengths -->
           ${strengthsList ? `
             <div style="margin-bottom: 24px;">
-              <h4 style="color: #10b981; font-size: 16px; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 6px; margin-bottom: 10px;">🌟 Core Strengths</h4>
+              <h4 style="color: #10b981; font-size: 16px; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 6px; margin-bottom: 10px;">ðŸŒŸ Core Strengths</h4>
               <ul style="padding-left: 20px; margin: 0;">${strengthsList}</ul>
             </div>
           ` : ''}
@@ -78,7 +78,7 @@ export default function ShareReportButton({ interview, feedback }) {
           <!-- Weaknesses -->
           ${weaknessesList ? `
             <div style="margin-bottom: 24px;">
-              <h4 style="color: #f43f5e; font-size: 16px; border-bottom: 1px solid rgba(244,63,94,0.2); padding-bottom: 6px; margin-bottom: 10px;">⚠️ Key Areas for Improvement</h4>
+              <h4 style="color: #f43f5e; font-size: 16px; border-bottom: 1px solid rgba(244,63,94,0.2); padding-bottom: 6px; margin-bottom: 10px;">âš ï¸ Key Areas for Improvement</h4>
               <ul style="padding-left: 20px; margin: 0;">${weaknessesList}</ul>
             </div>
           ` : ''}
@@ -94,9 +94,9 @@ export default function ShareReportButton({ interview, feedback }) {
         </div>
       `;
 
-      await base44.integrations.Core.SendEmail({
+      await iqClient.integrations.Core.SendEmail({
         to: email,
-        subject: `InterviewIQ AI Performance Report - ${interview.overall_score}% Overall Score 🧠`,
+        subject: `InterviewIQ AI Performance Report - ${interview.overall_score}% Overall Score ðŸ§ `,
         html: emailHtml
       });
 
@@ -181,3 +181,4 @@ export default function ShareReportButton({ interview, feedback }) {
   );
 }
 export { ShareReportButton };
+

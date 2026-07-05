@@ -5,33 +5,33 @@ export function getAppParams() {
   const appId = 
     urlParams.get('app_id') || 
     urlParams.get('appId') || 
-    localStorage.getItem('base44_app_id') || 
-    import.meta.env.VITE_BASE44_APP_ID || 
+    localStorage.getItem('iq_app_id') || 
+    import.meta.env.VITE_IQ_APP_ID || 
     'dummy-app-id';
 
   // Resolve Token
   const token = 
     urlParams.get('token') || 
-    localStorage.getItem('base44_token') || 
-    import.meta.env.VITE_BASE44_TOKEN || 
+    localStorage.getItem('iq_app_token') || 
+    import.meta.env.VITE_IQ_TOKEN || 
     'dummy-token';
 
   // Resolve App Base URL
   const appBaseUrl = 
     urlParams.get('app_base_url') || 
-    localStorage.getItem('base44_app_base_url') || 
-    import.meta.env.VITE_BASE44_APP_BASE_URL || 
+    localStorage.getItem('iq_app_base_url') || 
+    import.meta.env.VITE_IQ_APP_BASE_URL || 
     window.location.origin;
 
   // Persist if found in URL parameters
   if (urlParams.get('app_id') || urlParams.get('appId')) {
-    localStorage.setItem('base44_app_id', appId);
+    localStorage.setItem('iq_app_id', appId);
   }
   if (urlParams.get('token')) {
-    localStorage.setItem('base44_token', token);
+    localStorage.setItem('iq_app_token', token);
   }
   if (urlParams.get('app_base_url')) {
-    localStorage.setItem('base44_app_base_url', appBaseUrl);
+    localStorage.setItem('iq_app_base_url', appBaseUrl);
   }
 
   return { appId, token, appBaseUrl, functionsVersion: 'v1' };

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-/* ─── SUGGESTION DATA ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€ SUGGESTION DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const INTEREST_SUGGESTIONS = [
   'Artificial Intelligence', 'Machine Learning', 'Web Development', 'App Development',
   'Cloud Computing', 'Data Science', 'UI/UX Design', 'Cybersecurity', 'Blockchain',
@@ -37,7 +37,7 @@ const INTEREST_ICONS = {
   'App Development': 'smartphone', 'Data Science': 'sparkles', 'default': 'code'
 };
 
-/* ─── EMPTY FORM ──────────────────────────────────────────────────────────── */
+/* â”€â”€â”€ EMPTY FORM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const EMPTY_FORM = {
   personalInfo: {
     fullName: '', professionalTitle: '', email: '', phone: '',
@@ -57,7 +57,7 @@ const EMPTY_FORM = {
   softSkills: []
 };
 
-/* ─── VALIDATION ──────────────────────────────────────────────────────────── */
+/* â”€â”€â”€ VALIDATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const REQUIRED_FIELDS = [
   { path: ['personalInfo', 'fullName'],          label: 'Full Name' },
   { path: ['personalInfo', 'professionalTitle'], label: 'Professional Title' },
@@ -72,12 +72,12 @@ const validateForm = (data) => {
   return null;
 };
 
-/* ─── HISTORY STORAGE ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€ HISTORY STORAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const HISTORY_KEY = 'portfolio_history_v2';
 const loadHistory = () => { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch { return []; } };
 const saveHistory = list => localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
 
-/* ─── SECTION TABS ────────────────────────────────────────────────────────── */
+/* â”€â”€â”€ SECTION TABS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const SECTIONS = [
   { id: 'personal',     label: 'Personal'        },
   { id: 'socials',      label: 'Social Links'     },
@@ -89,7 +89,7 @@ const SECTIONS = [
   { id: 'interests',    label: 'Interests & Soft' },
 ];
 
-/* ────────────────────────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 export default function AIPortfolioBuilder() {
   const { profile, refetchProfile } = useAuth();
 
@@ -121,7 +121,7 @@ export default function AIPortfolioBuilder() {
   const [newInterestName, setNewInterestName] = useState('');
   const [newSoftName, setNewSoftName]         = useState('');
 
-  /* Load saved portfolio from profile ───────────────────────────────────── */
+  /* Load saved portfolio from profile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   useEffect(() => {
     if (profile?.portfolio_data) {
       try {
@@ -134,7 +134,7 @@ export default function AIPortfolioBuilder() {
     }
   }, [profile]);
 
-  /* ── Handlers ─────────────────────────────────────────────────────────── */
+  /* â”€â”€ Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const handlePersonalChange = e =>
     setFormData(p => ({ ...p, personalInfo: { ...p.personalInfo, [e.target.name]: e.target.value } }));
 
@@ -152,7 +152,7 @@ export default function AIPortfolioBuilder() {
     reader.readAsDataURL(file);
   };
 
-  /* ── Education ──────────────────────────────────────────────────────── */
+  /* â”€â”€ Education â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addEducation = () =>
     setFormData(p => ({ ...p, education: [...p.education, { degree:'', college:'', branch:'', university:'', startYear:'', endYear:'', gpaPoints:[] }] }));
   const deleteEducation = i =>
@@ -171,7 +171,7 @@ export default function AIPortfolioBuilder() {
   const removeGpaFromEdu = (eduIdx, gIdx) =>
     setFormData(p => { const l=[...p.education]; l[eduIdx].gpaPoints.splice(gIdx,1); return {...p, education:l}; });
 
-  /* ── Skills ─────────────────────────────────────────────────────────── */
+  /* â”€â”€ Skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addSkill = () => {
     if (!newSkillName.trim()) return;
     setFormData(p => {
@@ -184,7 +184,7 @@ export default function AIPortfolioBuilder() {
   const deleteSkill = (cat, name) =>
     setFormData(p => ({ ...p, skills: { ...p.skills, [cat]: p.skills[cat].filter(s=>s.name!==name) } }));
 
-  /* ── Projects ───────────────────────────────────────────────────────── */
+  /* â”€â”€ Projects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addProject = () =>
     setFormData(p => ({ ...p, projects:[...p.projects,{title:'',description:'',technologies:[],github:'',liveUrl:'',role:'',duration:''}] }));
   const deleteProject = i =>
@@ -194,7 +194,7 @@ export default function AIPortfolioBuilder() {
   const handleProjTagsChange = (i, str) =>
     setFormData(p => { const l=[...p.projects]; l[i]={...l[i],technologies:str.split(',').map(s=>s.trim()).filter(Boolean)}; return {...p,projects:l}; });
 
-  /* ── Certificates ───────────────────────────────────────────────────── */
+  /* â”€â”€ Certificates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addCertificate = () =>
     setFormData(p => ({ ...p, certificates:[...p.certificates,{title:'',issuedBy:'',credentialUrl:'',certificateImage:''}] }));
   const deleteCertificate = i =>
@@ -202,7 +202,7 @@ export default function AIPortfolioBuilder() {
   const handleCertChange = (i, field, val) =>
     setFormData(p => { const l=[...p.certificates]; l[i]={...l[i],[field]:val}; return {...p,certificates:l}; });
 
-  /* ── Languages ──────────────────────────────────────────────────────── */
+  /* â”€â”€ Languages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addLanguage = () => {
     if (!newLangName.trim()) return;
     setFormData(p => ({ ...p, languages:[...p.languages,{code:newLangCode.toUpperCase()||'IN', name:newLangName.trim()}] }));
@@ -211,7 +211,7 @@ export default function AIPortfolioBuilder() {
   const deleteLanguage = i =>
     setFormData(p => ({ ...p, languages:p.languages.filter((_,idx)=>idx!==i) }));
 
-  /* ── Interests ──────────────────────────────────────────────────────── */
+  /* â”€â”€ Interests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addInterest = (name) => {
     const n = (name || newInterestName).trim();
     if (!n) return;
@@ -224,7 +224,7 @@ export default function AIPortfolioBuilder() {
   const deleteInterest = i =>
     setFormData(p => ({ ...p, interests:p.interests.filter((_,idx)=>idx!==i) }));
 
-  /* ── Soft Skills ─────────────────────────────────────────────────────── */
+  /* â”€â”€ Soft Skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const addSoftSkill = (name) => {
     const n = (name || newSoftName).trim();
     if (!n) return;
@@ -237,11 +237,11 @@ export default function AIPortfolioBuilder() {
   const deleteSoftSkill = i =>
     setFormData(p => ({ ...p, softSkills:p.softSkills.filter((_,idx)=>idx!==i) }));
 
-  /* ── Save & Generate ─────────────────────────────────────────────────── */
+  /* â”€â”€ Save & Generate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const handleSave = async () => {
     if (!profile) return;
     try {
-      await base44.entities.UserProfile.update(profile.id, { portfolio_data: JSON.stringify(formData) });
+      await iqClient.entities.UserProfile.update(profile.id, { portfolio_data: JSON.stringify(formData) });
       await refetchProfile();
     } catch { toast.error('Save failed.'); }
   };
@@ -255,8 +255,8 @@ export default function AIPortfolioBuilder() {
 Name: ${formData.personalInfo.fullName || 'the candidate'}
 Title: ${formData.personalInfo.professionalTitle || 'Software Engineer'}
 Skills: ${skills || 'software development'}
-Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return only the bio text.`;
-      const response = await base44.integrations.Core.InvokeLLM({ prompt });
+Keep it 3â€“4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return only the bio text.`;
+      const response = await iqClient.integrations.Core.InvokeLLM({ prompt });
       const text = (response.text || response || '').trim();
       setFormData(p => ({ ...p, personalInfo: { ...p.personalInfo, bio: text } }));
       toast.success('AI bio generated!');
@@ -268,7 +268,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
     // Validate
     const err = validateForm(formData);
     if (err) {
-      toast.error(err, { icon: '⚠️' });
+      toast.error(err, { icon: 'âš ï¸' });
       // Highlight missing required fields
       const missing = REQUIRED_FIELDS.filter(f => !f.path.reduce((acc,k)=>acc?.[k], formData)?.trim());
       setValidationErrors(missing.map(f=>f.path[1]));
@@ -297,7 +297,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
       await sendPortfolioEmail(formData, shareLink);
 
       setGenerated(true);
-      toast.success('Portfolio generated & email sent! 🎉');
+      toast.success('Portfolio generated & email sent! ðŸŽ‰');
     } catch (e) {
       console.error(e);
       toast.error('Generation failed. Please try again.');
@@ -306,7 +306,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
     }
   };
 
-  /* ── Email sender ─────────────────────────────────────────────────────── */
+  /* â”€â”€ Email sender â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const sendPortfolioEmail = async (data, shareLink) => {
     const recipientEmail = profile?.email || data.personalInfo.email;
     if (!recipientEmail) return;
@@ -315,8 +315,8 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
     const html = `
     <div style="background:#0b0c16;color:#f1f3f9;padding:32px;font-family:sans-serif;max-width:600px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);margin:0 auto;">
       <div style="text-align:center;margin-bottom:24px;">
-        <h2 style="color:#8b5cf6;font-size:26px;font-weight:900;margin:0;">🌐 Portfolio Ready!</h2>
-        <p style="color:#64748b;font-size:13px;margin:8px 0 0;">Generated by AI Portfolio Builder · InterviewIQ AI</p>
+        <h2 style="color:#8b5cf6;font-size:26px;font-weight:900;margin:0;">ðŸŒ Portfolio Ready!</h2>
+        <p style="color:#64748b;font-size:13px;margin:8px 0 0;">Generated by AI Portfolio Builder Â· InterviewIQ AI</p>
       </div>
       <p style="font-size:15px;color:#cbd5e1;line-height:1.6;">
         Hi <strong style="color:white;">${p.fullName}</strong>, your professional developer portfolio has been successfully generated!
@@ -333,7 +333,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
       </div>
       <div style="text-align:center;margin:28px 0;">
         <a href="${shareLink}" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:14px 30px;text-decoration:none;font-weight:bold;border-radius:8px;display:inline-block;font-size:14px;">
-          🌐 View Live Portfolio
+          ðŸŒ View Live Portfolio
         </a>
       </div>
       <div style="background:rgba(0,255,204,0.05);border:1px solid rgba(0,255,204,0.15);border-radius:10px;padding:16px;margin:20px 0;">
@@ -341,18 +341,18 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
         <p style="margin:0;font-size:12px;color:#94a3b8;word-break:break-all;">${shareLink}</p>
       </div>
       <p style="font-size:11px;color:#475569;text-align:center;border-top:1px solid rgba(255,255,255,0.05);padding-top:16px;margin-top:24px;">
-        To download PDF: open the portfolio link and press Ctrl+P. · Sent automatically by InterviewIQ AI.
+        To download PDF: open the portfolio link and press Ctrl+P. Â· Sent automatically by InterviewIQ AI.
       </p>
     </div>`;
 
-    await base44.integrations.Core.SendEmail({
+    await iqClient.integrations.Core.SendEmail({
       to: recipientEmail,
-      subject: `🌐 Your Portfolio is Live! — ${p.fullName} | InterviewIQ AI`,
+      subject: `ðŸŒ Your Portfolio is Live! â€” ${p.fullName} | InterviewIQ AI`,
       html
     });
   };
 
-  /* ── History actions ─────────────────────────────────────────────────── */
+  /* â”€â”€ History actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const loadHistoryEntry = (entry) => {
     setFormData({ ...EMPTY_FORM, ...entry.snapshot,
       personalInfo: { ...EMPTY_FORM.personalInfo, ...entry.snapshot.personalInfo },
@@ -372,7 +372,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
     toast.success('Removed from history.');
   };
 
-  /* ── Download helpers ─────────────────────────────────────────────────── */
+  /* â”€â”€ Download helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const shareLink = formData.personalInfo.email
     ? `${window.location.origin}/portfolio-preview?email=${encodeURIComponent(formData.personalInfo.email)}`
     : `${window.location.origin}/portfolio-preview`;
@@ -419,18 +419,18 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
     finally { setSaving(false); }
   };
 
-  /* ── Computed completeness score for progress bar ────────────────────── */
+  /* â”€â”€ Computed completeness score for progress bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const completenessScore = (() => {
     let filled = 0, total = REQUIRED_FIELDS.length;
     REQUIRED_FIELDS.forEach(f => { if (f.path.reduce((a,k)=>a?.[k], formData)?.trim()) filled++; });
     return Math.round((filled / total) * 100);
   })();
 
-  /* ──────────────────────────────────────────────────────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   return (
     <div className="space-y-6 pt-4 pb-16 max-w-3xl mx-auto relative">
 
-      {/* ── PAGE HEADER ───────────────────────────────────────────────────── */}
+      {/* â”€â”€ PAGE HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-5">
         <div className="space-y-1">
           <h2 className="text-3xl font-display font-bold text-white flex items-center gap-2">
@@ -447,7 +447,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
         </button>
       </div>
 
-      {/* ── HISTORY MODAL ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ HISTORY MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {!generated && (
         <div className="space-y-1.5">
           <div className="flex justify-between text-[10px] font-bold">
@@ -464,7 +464,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
         </div>
       )}
 
-      {/* ── HISTORY MODAL ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ HISTORY MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <AnimatePresence>
         {showHistory && (
           <motion.div
@@ -549,7 +549,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                         </div>
                       </div>
 
-                      {/* ── Eye Dropdown Panel ─────────────────────────────── */}
+                      {/* â”€â”€ Eye Dropdown Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
                       <AnimatePresence>
                         {historyEyeOpen === entry.id && (
                           <motion.div
@@ -624,11 +624,11 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
         )}
       </AnimatePresence>
 
-      {/* ── MAIN CONTENT ──────────────────────────────────────────────────── */}
+      {/* â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <AnimatePresence mode="wait">
         {!generated ? (
 
-          /* ── FORM ────────────────────────────────────────────────────────── */
+          /* â”€â”€ FORM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
           <motion.div key="form" initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-10 }} className="space-y-5">
 
             {/* Section Tabs */}
@@ -647,7 +647,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
             {/* Form Panel */}
             <div className="bg-[#0e0f1d]/90 border border-white/5 rounded-2xl p-6 shadow-2xl">
 
-              {/* ── PERSONAL ─────────────────────────────────────────────── */}
+              {/* â”€â”€ PERSONAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'personal' && (
                 <div className="space-y-4">
                   <SectionTitle>Personal Details</SectionTitle>
@@ -685,7 +685,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                         <input type="file" accept="image/*" onChange={handleProfilePicUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
                         <Upload size={18} className="text-violet-400" />
                         <span className="text-[10px] text-slate-400 font-semibold text-center">Click to upload photo</span>
-                        {formData.personalInfo.profilePic && <span className="text-[9px] text-emerald-400 font-bold">✓ Photo ready</span>}
+                        {formData.personalInfo.profilePic && <span className="text-[9px] text-emerald-400 font-bold">âœ“ Photo ready</span>}
                       </div>
                       <div><Label>Or image URL</Label><Input name="profilePic" value={formData.personalInfo.profilePic?.startsWith('data:') ? '(local file)' : formData.personalInfo.profilePic} onChange={handlePersonalChange} placeholder="https://..." /></div>
                     </div>
@@ -695,7 +695,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                     <div className="flex justify-between items-center mb-1.5">
                       <Label>About Me Bio *</Label>
                       <button type="button" onClick={handleAIGenerate} disabled={aiGenerating} className="flex items-center gap-1 text-[10px] text-violet-400 font-bold hover:text-violet-300 disabled:opacity-50">
-                        {aiGenerating ? <Loader2 size={10} className="animate-spin" /> : <Sparkles size={10} />} ✨ AI Generate
+                        {aiGenerating ? <Loader2 size={10} className="animate-spin" /> : <Sparkles size={10} />} âœ¨ AI Generate
                       </button>
                     </div>
                     <textarea name="bio" rows={4} value={formData.personalInfo.bio} onChange={handlePersonalChange}
@@ -706,7 +706,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── SOCIALS ───────────────────────────────────────────────── */}
+              {/* â”€â”€ SOCIALS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'socials' && (
                 <div className="space-y-4">
                   <SectionTitle>Social & Professional Links</SectionTitle>
@@ -722,7 +722,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── SKILLS ───────────────────────────────────────────────── */}
+              {/* â”€â”€ SKILLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'skills' && (
                 <div className="space-y-4">
                   <SectionTitle>Technical Skills & Proficiency</SectionTitle>
@@ -746,7 +746,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                           {list.map(s => (
                             <span key={s.name} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 border border-white/8 text-[10px] text-white font-semibold">
                               {s.name} <span className="text-[#00ffcc] font-black">{s.percentage}%</span>
-                              <button onClick={()=>deleteSkill(cat,s.name)} className="text-slate-500 hover:text-red-400 ml-0.5">×</button>
+                              <button onClick={()=>deleteSkill(cat,s.name)} className="text-slate-500 hover:text-red-400 ml-0.5">Ã—</button>
                             </span>
                           ))}
                         </div>
@@ -757,7 +757,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── EDUCATION ─────────────────────────────────────────────── */}
+              {/* â”€â”€ EDUCATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'education' && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-white/5 pb-2">
@@ -789,7 +789,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                           <div className="flex flex-wrap gap-1.5">
                             {(edu.gpaPoints||[]).map((gp,gi)=>(
                               <span key={gi} className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#00ffcc]/10 text-[#00ffcc] text-[9px] font-bold">
-                                {gp.label}: {gp.value} <button onClick={()=>removeGpaFromEdu(i,gi)}>×</button>
+                                {gp.label}: {gp.value} <button onClick={()=>removeGpaFromEdu(i,gi)}>Ã—</button>
                               </span>
                             ))}
                           </div>
@@ -800,7 +800,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── PROJECTS ──────────────────────────────────────────────── */}
+              {/* â”€â”€ PROJECTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'projects' && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-white/5 pb-2">
@@ -828,7 +828,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── CERTIFICATES ──────────────────────────────────────────── */}
+              {/* â”€â”€ CERTIFICATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'certificates' && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-white/5 pb-2">
@@ -852,7 +852,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── LANGUAGES ─────────────────────────────────────────────── */}
+              {/* â”€â”€ LANGUAGES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'languages' && (
                 <div className="space-y-4">
                   <SectionTitle>Languages You Speak</SectionTitle>
@@ -866,7 +866,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                       <span key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/8 bg-white/3 text-xs font-semibold text-white">
                         <span className="px-1.5 py-0.5 rounded bg-white/8 text-[#00ffcc] text-[9px] font-black">{l.code}</span>
                         {l.name}
-                        <button onClick={()=>deleteLanguage(i)} className="text-slate-500 hover:text-red-400 ml-1">×</button>
+                        <button onClick={()=>deleteLanguage(i)} className="text-slate-500 hover:text-red-400 ml-1">Ã—</button>
                       </span>
                     ))}
                     {formData.languages.length === 0 && <EmptyState text="No languages added yet." />}
@@ -874,11 +874,11 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                 </div>
               )}
 
-              {/* ── INTERESTS & SOFT SKILLS ───────────────────────────────── */}
+              {/* â”€â”€ INTERESTS & SOFT SKILLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {activeSection === 'interests' && (
                 <div className="space-y-6">
 
-                  {/* ─ Interests ─ */}
+                  {/* â”€ Interests â”€ */}
                   <div className="space-y-3">
                     <SectionTitle>Interests</SectionTitle>
                     <div className="flex gap-2 items-end">
@@ -890,7 +890,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
 
                     {/* Suggestions */}
                     <div>
-                      <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2">Suggestions — click to add instantly</p>
+                      <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2">Suggestions â€” click to add instantly</p>
                       <div className="flex flex-wrap gap-1.5">
                         {INTEREST_SUGGESTIONS.map(s => {
                           const added = formData.interests.some(i=>i.name.toLowerCase()===s.toLowerCase());
@@ -902,7 +902,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                                   : 'bg-white/3 border-white/8 text-slate-400 hover:bg-violet-500/10 hover:border-violet-500/25 hover:text-violet-300 cursor-pointer'
                               }`}
                             >
-                              {added ? '✓ ' : '+ '}{s}
+                              {added ? 'âœ“ ' : '+ '}{s}
                             </button>
                           );
                         })}
@@ -915,14 +915,14 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                         <span className="w-full text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">Added ({formData.interests.length})</span>
                         {formData.interests.map((int, i) => (
                           <span key={i} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#00ffcc]/8 border border-[#00ffcc]/15 text-[10px] text-white font-semibold">
-                            {int.name} <button onClick={()=>deleteInterest(i)} className="text-slate-500 hover:text-red-400">×</button>
+                            {int.name} <button onClick={()=>deleteInterest(i)} className="text-slate-500 hover:text-red-400">Ã—</button>
                           </span>
                         ))}
                       </div>
                     )}
                   </div>
 
-                  {/* ─ Soft Skills ─ */}
+                  {/* â”€ Soft Skills â”€ */}
                   <div className="space-y-3 border-t border-white/5 pt-5">
                     <SectionTitle>Soft Skills</SectionTitle>
                     <div className="flex gap-2 items-end">
@@ -934,7 +934,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
 
                     {/* Suggestions */}
                     <div>
-                      <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2">Suggestions — click to add instantly</p>
+                      <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2">Suggestions â€” click to add instantly</p>
                       <div className="flex flex-wrap gap-1.5">
                         {SOFT_SKILL_SUGGESTIONS.map(s => {
                           const added = formData.softSkills.some(sk=>sk.name.toLowerCase()===s.toLowerCase());
@@ -946,7 +946,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                                   : 'bg-white/3 border-white/8 text-slate-400 hover:bg-blue-500/10 hover:border-blue-500/25 hover:text-blue-300 cursor-pointer'
                               }`}
                             >
-                              {added ? '✓ ' : '+ '}{s}
+                              {added ? 'âœ“ ' : '+ '}{s}
                             </button>
                           );
                         })}
@@ -959,7 +959,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                         <span className="w-full text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">Added ({formData.softSkills.length})</span>
                         {formData.softSkills.map((sk, i) => (
                           <span key={i} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-violet-500/8 border border-violet-500/15 text-[10px] text-white font-semibold">
-                            {sk.name} <button onClick={()=>deleteSoftSkill(i)} className="text-slate-500 hover:text-red-400">×</button>
+                            {sk.name} <button onClick={()=>deleteSoftSkill(i)} className="text-slate-500 hover:text-red-400">Ã—</button>
                           </span>
                         ))}
                       </div>
@@ -978,7 +978,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
               </motion.div>
             )}
 
-            {/* ── GENERATE BUTTON ─────────────────────────────────────────── */}
+            {/* â”€â”€ GENERATE BUTTON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
             <motion.button
               onClick={handleGeneratePortfolio}
               disabled={saving}
@@ -998,7 +998,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
 
         ) : (
 
-          /* ── SUCCESS OUTPUT ───────────────────────────────────────────────── */
+          /* â”€â”€ SUCCESS OUTPUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
           <motion.div key="output" initial={{opacity:0,scale:0.96}} animate={{opacity:1,scale:1}} exit={{opacity:0}} className="space-y-5">
             <div className="bg-[#0e0f1d]/90 border border-white/8 rounded-2xl p-8 shadow-2xl text-center space-y-8">
               <div className="flex flex-col items-center gap-3">
@@ -1006,7 +1006,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
                   className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.3)]">
                   <FileCheck size={30} className="text-white" />
                 </motion.div>
-                <h3 className="text-2xl font-black text-white">Portfolio Generated! 🎉</h3>
+                <h3 className="text-2xl font-black text-white">Portfolio Generated! ðŸŽ‰</h3>
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                   <Mail size={11} className="text-emerald-400" />
                   <span className="text-[10px] font-bold text-emerald-400">Portfolio link emailed to {profile?.email || formData.personalInfo.email}</span>
@@ -1056,7 +1056,7 @@ Keep it 3–4 sentences. Direct, punchy, recruiter-friendly. No fluff. Return on
   );
 }
 
-/* ── Sub-components ────────────────────────────────────────────────────────── */
+/* â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function SectionTitle({ children }) {
   return <h3 className="text-xs font-black text-white uppercase tracking-widest pb-2">{children}</h3>;
 }
@@ -1072,7 +1072,7 @@ function EmptyState({ text }) {
   return <p className="text-center text-[10px] text-slate-600 py-6">{text}</p>;
 }
 
-/* ── HTML Portfolio builder (same as before) ──────────────────────────────── */
+/* â”€â”€ HTML Portfolio builder (same as before) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function buildPortfolioHTML(data) {
   const p = data.personalInfo;
   const s = data.socialLinks;
@@ -1095,7 +1095,7 @@ function buildPortfolioHTML(data) {
     <div class="card edu-card reveal">
       <div class="edu-header">
         <div><h4>${val(e.degree)}</h4><p class="sub">${val(e.college)}</p><p class="sub2">${e.university||''}</p></div>
-        <span class="badge">${val(e.startYear)}–${val(e.endYear)}</span>
+        <span class="badge">${val(e.startYear)}â€“${val(e.endYear)}</span>
       </div>
       ${(e.gpaPoints||[]).length?`<div class="gpa-grid">${e.gpaPoints.map(g=>`<div class="gpa-item"><span>${g.label}</span><strong>${g.value}</strong></div>`).join('')}</div>`:''}
     </div>`).join('');
@@ -1107,21 +1107,21 @@ function buildPortfolioHTML(data) {
         <h4>${val(pr.title)}</h4><p>${val(pr.description)}</p>
         <div class="tags">${(pr.technologies||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
         <div class="proj-links">
-          ${pr.liveUrl?`<a href="${pr.liveUrl}" target="_blank">Live Demo ↗</a>`:''}
-          ${pr.github?`<a href="${pr.github}" target="_blank" class="ghost">GitHub ↗</a>`:''}
+          ${pr.liveUrl?`<a href="${pr.liveUrl}" target="_blank">Live Demo â†—</a>`:''}
+          ${pr.github?`<a href="${pr.github}" target="_blank" class="ghost">GitHub â†—</a>`:''}
         </div>
       </div>
     </div>`).join('');
 
   const certsHTML = (data.certificates||[]).map(c=>`
     <div class="cert-card reveal">
-      <div class="cert-img">${c.certificateImage?`<img src="${c.certificateImage}" alt="${c.title}"/>`:'<div class="cert-placeholder">🏆</div>'}</div>
+      <div class="cert-img">${c.certificateImage?`<img src="${c.certificateImage}" alt="${c.title}"/>`:'<div class="cert-placeholder">ðŸ†</div>'}</div>
       <div class="cert-info"><p class="cert-title">${val(c.title)}</p><p class="cert-by">${val(c.issuedBy)}</p></div>
     </div>`).join('');
 
   const langsHTML = (data.languages||[]).map(l=>`<div class="lang-chip"><span class="code">${l.code}</span>${l.name}</div>`).join('');
-  const interestsHTML = (data.interests||[]).map(i=>`<div class="icon-chip"><div class="chip-icon">★</div><span>${i.name}</span></div>`).join('');
-  const softHTML = (data.softSkills||[]).map(sk=>`<div class="icon-chip"><div class="chip-icon">✦</div><span>${sk.name}</span></div>`).join('');
+  const interestsHTML = (data.interests||[]).map(i=>`<div class="icon-chip"><div class="chip-icon">â˜…</div><span>${i.name}</span></div>`).join('');
+  const softHTML = (data.softSkills||[]).map(sk=>`<div class="icon-chip"><div class="chip-icon">âœ¦</div><span>${sk.name}</span></div>`).join('');
 
   const socialIcons = [
     {key:'github', label:'GitHub', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.23 1.84 1.23 1.07 1.84 2.81 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.65.24 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>'},
@@ -1238,7 +1238,7 @@ footer{padding:32px 0;text-align:center;font-size:10px;color:var(--muted);border
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-right">
-      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light</button>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">â˜€ï¸ Light</button>
     </div>
   </div>
 </nav>
@@ -1247,14 +1247,14 @@ footer{padding:32px 0;text-align:center;font-size:10px;color:var(--muted);border
 <div class="wrap">
   <div class="hero-in">
     <div class="hero-text">
-      <span class="greet">✦ Welcome to my portfolio</span>
+      <span class="greet">âœ¦ Welcome to my portfolio</span>
       <h1>Hi, I'm <span>${val(p.fullName)}</span></h1>
       <div class="typing"><span id="typed"></span><span class="cursor"></span></div>
       <p class="tagline">${val(p.tagline)}</p>
       <div class="hero-btns">
-        <a href="#projects" class="btn-prim">View Projects ↓</a>
+        <a href="#projects" class="btn-prim">View Projects â†“</a>
         <a href="#contact" class="btn-ghost">Contact Me</a>
-        ${p.resumeUrl?`<a href="${p.resumeUrl}" target="_blank" class="btn-ghost">Download Resume ↓</a>`:''}
+        ${p.resumeUrl?`<a href="${p.resumeUrl}" target="_blank" class="btn-ghost">Download Resume â†“</a>`:''}
       </div>
       <div class="soc-row">${socialIcons}</div>
     </div>
@@ -1272,10 +1272,10 @@ footer{padding:32px 0;text-align:center;font-size:10px;color:var(--muted);border
   <div class="sec-head"><h2 class="sec-title">About Me</h2><p class="sec-sub">Passionate about building intelligent solutions</p><div class="divider"></div></div>
   <div class="bio-card reveal">${val(p.bio)}</div>
   <div class="detail-grid">
-    <div class="detail-card reveal"><div class="detail-icon">📍</div><div><div class="detail-label">Location</div><div class="detail-val">${val(p.location)}</div></div></div>
-    <div class="detail-card reveal"><div class="detail-icon">🎓</div><div><div class="detail-label">College</div><div class="detail-val">${val(p.college)}</div></div></div>
-    ${p.collaboration?`<div class="detail-card reveal"><div class="detail-icon">🤝</div><div><div class="detail-label">Collaboration</div><div class="detail-val">${p.collaboration}</div></div></div>`:''}
-    ${p.joinedDate?`<div class="detail-card reveal"><div class="detail-icon">📅</div><div><div class="detail-label">Joined</div><div class="detail-val">${p.joinedDate}</div></div></div>`:''}
+    <div class="detail-card reveal"><div class="detail-icon">ðŸ“</div><div><div class="detail-label">Location</div><div class="detail-val">${val(p.location)}</div></div></div>
+    <div class="detail-card reveal"><div class="detail-icon">ðŸŽ“</div><div><div class="detail-label">College</div><div class="detail-val">${val(p.college)}</div></div></div>
+    ${p.collaboration?`<div class="detail-card reveal"><div class="detail-icon">ðŸ¤</div><div><div class="detail-label">Collaboration</div><div class="detail-val">${p.collaboration}</div></div></div>`:''}
+    ${p.joinedDate?`<div class="detail-card reveal"><div class="detail-icon">ðŸ“…</div><div><div class="detail-label">Joined</div><div class="detail-val">${p.joinedDate}</div></div></div>`:''}
   </div>
 </div></section>
 
@@ -1324,14 +1324,14 @@ ${(data.softSkills||[]).length?`
 <section id="contact"><div class="wrap">
   <div class="sec-head"><h2 class="sec-title">Get In Touch</h2><p class="sec-sub">Let's build something amazing</p><div class="divider"></div></div>
   <div class="contact-grid">
-    ${p.email?`<div class="contact-card reveal"><div class="c-icon">✉️</div><div class="c-label">Email</div><a href="mailto:${p.email}">${p.email}</a></div>`:''}
-    ${p.phone?`<div class="contact-card reveal"><div class="c-icon">📞</div><div class="c-label">Phone</div><a href="tel:${p.phone}">${p.phone}</a></div>`:''}
-    ${p.location?`<div class="contact-card reveal"><div class="c-icon">📍</div><div class="c-label">Location</div><p>${p.location}</p></div>`:''}
+    ${p.email?`<div class="contact-card reveal"><div class="c-icon">âœ‰ï¸</div><div class="c-label">Email</div><a href="mailto:${p.email}">${p.email}</a></div>`:''}
+    ${p.phone?`<div class="contact-card reveal"><div class="c-icon">ðŸ“ž</div><div class="c-label">Phone</div><a href="tel:${p.phone}">${p.phone}</a></div>`:''}
+    ${p.location?`<div class="contact-card reveal"><div class="c-icon">ðŸ“</div><div class="c-label">Location</div><p>${p.location}</p></div>`:''}
   </div>
   <div class="chip-row">${socialIcons}</div>
 </div></section>
 
-<footer><div class="wrap"><p>© ${new Date().getFullYear()} ${name}. All rights reserved. · Built with ❤️ using InterviewIQ AI</p></div></footer>
+<footer><div class="wrap"><p>Â© ${new Date().getFullYear()} ${name}. All rights reserved. Â· Built with â¤ï¸ using InterviewIQ AI</p></div></footer>
 
 <script>
 const cv=document.getElementById('bg'),ctx=cv.getContext('2d');
@@ -1375,7 +1375,7 @@ document.querySelectorAll('.bar').forEach(b=>barObs.observe(b));
 function toggleTheme(){
   const isDark=document.documentElement.dataset.theme==='dark';
   document.documentElement.dataset.theme=isDark?'light':'dark';
-  document.getElementById('themeBtn').textContent=isDark?'🌙 Dark':'☀️ Light';
+  document.getElementById('themeBtn').textContent=isDark?'ðŸŒ™ Dark':'â˜€ï¸ Light';
 }
 
 window.addEventListener('scroll',()=>{
@@ -1393,3 +1393,4 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 </script>
 </body></html>`;
 }
+

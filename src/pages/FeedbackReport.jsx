@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { ShareReportButton } from '../components/ShareReportButton';
 import { Button } from '../components/ui/Button';
 import { 
@@ -37,7 +37,7 @@ export default function FeedbackReport() {
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const data = await base44.entities.Interview.get(interviewId);
+        const data = await iqClient.entities.Interview.get(interviewId);
         setInterview(data);
         if (data && data.feedback_json) {
           setFeedback(JSON.parse(data.feedback_json));
@@ -331,3 +331,4 @@ export default function FeedbackReport() {
   );
 }
 export { FeedbackReport };
+

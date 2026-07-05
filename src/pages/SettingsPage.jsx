@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { VoiceSettings } from '../components/VoiceSettings';
 import { ReminderSettings } from '../components/ReminderSettings';
 import { useAuth } from '../lib/AuthContext';
@@ -112,7 +112,7 @@ export default function SettingsPage() {
           <div className="space-y-1">
             <h4 className="text-sm font-bold text-white leading-none">Data Retention & Privacy Notice</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              InterviewIQ AI stores text transcripts, evaluations, and mock scores securely inside your Base44 client collection database. Audio recording is transcribed locally in-browser via Web Speech and is not cached on remote servers.
+              InterviewIQ AI stores text transcripts, evaluations, and mock scores securely inside your InterviewIQ local storage database. Audio recording is transcribed locally in-browser via Web Speech and is not cached on remote servers.
             </p>
           </div>
         </div>
@@ -121,3 +121,4 @@ export default function SettingsPage() {
   );
 }
 export { SettingsPage };
+

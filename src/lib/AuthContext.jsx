@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { base44 } from '../api/base44Client';
+﻿import React, { createContext, useContext, useState, useEffect } from 'react';
+import { iqClient } from '../api/iqClient';
 
 const AuthContext = createContext(null);
 
@@ -11,11 +11,11 @@ export function AuthProvider({ children }) {
   const fetchAuth = async () => {
     try {
       setLoading(true);
-      const me = await base44.auth.me();
+      const me = await iqClient.auth.me();
       if (me && me.email) {
         setUser(me);
         // Fetch UserProfile matching user's email
-        const profiles = await base44.entities.UserProfile.filter({
+        const profiles = await iqClient.entities.UserProfile.filter({
           email: me.email
         });
         if (profiles && profiles.length > 0) {
@@ -41,16 +41,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = () => {
-    base44.auth.loginWithProvider('google', window.location.origin + '/dashboard');
+    iqClient.auth.loginWithProvider('google', window.location.origin + '/dashboard');
   };
 
   const loginWithEmail = async (email, password) => {
     try {
       setLoading(true);
-      const res = await base44.auth.loginViaEmailPassword(email, password);
+      const res = await iqClient.auth.loginViaEmailPassword(email, password);
       if (res && res.user) {
         setUser(res.user);
-        const profiles = await base44.entities.UserProfile.filter({
+        const profiles = await iqClient.entities.UserProfile.filter({
           email: res.user.email
         });
         if (profiles && profiles.length > 0) {
@@ -72,12 +72,12 @@ export function AuthProvider({ children }) {
   const registerWithEmail = async (email, password, fullName) => {
     try {
       setLoading(true);
-      await base44.auth.register({
+      await iqClient.auth.register({
         email,
         password,
         full_name: fullName
       });
-      const res = await base44.auth.loginViaEmailPassword(email, password);
+      const res = await iqClient.auth.loginViaEmailPassword(email, password);
       if (res && res.user) {
         setUser(res.user);
         setProfile(null);
@@ -94,7 +94,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await base44.auth.logout(window.location.origin + '/');
+      await iqClient.auth.logout(window.location.origin + '/');
     } catch (e) {
       localStorage.clear();
       window.location.href = '/';
@@ -104,7 +104,7 @@ export function AuthProvider({ children }) {
   const refetchProfile = async () => {
     if (user && user.email) {
       try {
-        const profiles = await base44.entities.UserProfile.filter({
+        const profiles = await iqClient.entities.UserProfile.filter({
           email: user.email
         });
         if (profiles && profiles.length > 0) {
@@ -144,3 +144,4 @@ export function useAuth() {
   }
   return context;
 }
+

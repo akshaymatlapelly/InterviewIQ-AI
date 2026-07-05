@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import { Select } from '../components/ui/Select';
@@ -71,7 +71,7 @@ export default function Onboarding() {
     setResumeFile(file);
     setLoading(true);
     try {
-      const uploadRes = await base44.integrations.Core.UploadFile({ file });
+      const uploadRes = await iqClient.integrations.Core.UploadFile({ file });
       if (uploadRes && uploadRes.url) {
         setResumeUrl(uploadRes.url);
         toast.success("Resume uploaded successfully!");
@@ -124,7 +124,7 @@ export default function Onboarding() {
       const parsedAnalysis = analyzeResumeText(rawTextForAnalyzer, form.role || '');
       let analysisJsonString = JSON.stringify(parsedAnalysis);
 
-      await base44.entities.UserProfile.create({
+      await iqClient.entities.UserProfile.create({
         ...form,
         resume_url: resumeUrl,
         resume_analysis: analysisJsonString,
@@ -368,3 +368,4 @@ export default function Onboarding() {
   );
 }
 export { Onboarding };
+

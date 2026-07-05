@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { extractResumeText } from '../utils/resumeParser';
 import { analyzeResumeText } from '../utils/resumeAnalyzer';
 import {
@@ -19,14 +19,14 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-// ─── Small pill tag ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Small pill tag â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const Tag = ({ text }) => (
   <span className="inline-flex items-center px-3 py-1.5 rounded-full text-[11px] font-medium border border-white/10 bg-[#1a1b2e] text-slate-300 leading-snug">
     {text}
   </span>
 );
 
-// ─── Section box ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Section box â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const Section = ({ title, icon, children }) => (
   <div className="border border-white/8 rounded-2xl p-5 space-y-3 bg-[#0f1020] transition-all duration-300 hover:scale-[1.01] hover:border-violet-500/20 hover:shadow-[0_0_20px_rgba(139,92,246,0.04)]">
     <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -37,7 +37,7 @@ const Section = ({ title, icon, children }) => (
   </div>
 );
 
-// ─── Numbered question list ───────────────────────────────────────────────────
+// â”€â”€â”€ Numbered question list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const QList = ({ questions }) => (
   <ol className="space-y-2">
     {(questions || []).map((q, i) => (
@@ -49,7 +49,7 @@ const QList = ({ questions }) => (
   </ol>
 );
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function ResumeCenter() {
   const { profile, refetchProfile } = useAuth();
 
@@ -90,7 +90,7 @@ export default function ResumeCenter() {
     }
   }, [profile]);
 
-  // ── Upload handler ──────────────────────────────────────────────
+  // â”€â”€ Upload handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -112,7 +112,7 @@ export default function ResumeCenter() {
       const result = analyzeResumeText(text, '');
 
       // 4. Save filename + analysis JSON to profile (store local:// marker as URL)
-      await base44.entities.UserProfile.update(profile.id, {
+      await iqClient.entities.UserProfile.update(profile.id, {
         resume_url: `local://${file.name}`,
         resume_analysis: JSON.stringify(result),
       });
@@ -128,12 +128,12 @@ export default function ResumeCenter() {
     }
   };
 
-  // ── Delete handler ──────────────────────────────────────────────
+  // â”€â”€ Delete handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleDelete = async () => {
     if (!window.confirm('Delete your resume and clear all analysis data?')) return;
     setDeleting(true);
     try {
-      await base44.entities.UserProfile.update(profile.id, {
+      await iqClient.entities.UserProfile.update(profile.id, {
         resume_url: '',
         resume_analysis: '',
       });
@@ -151,7 +151,7 @@ export default function ResumeCenter() {
     }
   };
 
-  // ── Download handler ───────────────────────────────────────────
+  // â”€â”€ Download handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleDownload = () => {
     if (!fileDataUrl) { toast.error('File not available locally. Please re-upload.'); return; }
     const a = document.createElement('a');
@@ -170,7 +170,7 @@ export default function ResumeCenter() {
     }
   };
 
-  // ── Score colour helpers ────────────────────────────────────────────────────
+  // â”€â”€ Score colour helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const scoreColour = (s) =>
     s >= 80 ? 'text-emerald-400' : s >= 60 ? 'text-amber-400' : 'text-rose-400';
 
@@ -183,7 +183,7 @@ export default function ResumeCenter() {
     !analysis.candidate_summary &&
     !analysis.technical_questions;
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <div className="max-w-4xl mx-auto space-y-6 pt-4 pb-10">
 
@@ -203,7 +203,7 @@ export default function ResumeCenter() {
           {uploading ? (
             <>
               <Loader2 className="w-9 h-9 text-violet-400 animate-spin" />
-              <p className="text-sm text-slate-300 font-semibold">Extracting & analysing resume…</p>
+              <p className="text-sm text-slate-300 font-semibold">Extracting & analysing resumeâ€¦</p>
               <p className="text-xs text-slate-500">This may take a few seconds</p>
             </>
           ) : (
@@ -229,13 +229,13 @@ export default function ResumeCenter() {
                   onClick={handleViewInTab}
                   className="text-[10px] text-violet-400 hover:underline"
                 >
-                  View →
+                  View â†’
                 </button>
                 <button
                   onClick={handleDownload}
                   className="text-[10px] text-violet-400 hover:underline"
                 >
-                  Download →
+                  Download â†’
                 </button>
               </div>
             </div>
@@ -266,7 +266,7 @@ export default function ResumeCenter() {
         </div>
       )}
 
-      {/* ── Analysis Results ────────────────────────────────────────────── */}
+      {/* â”€â”€ Analysis Results â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {analysis && !isLegacyAnalysis && !uploading && (
         <div className="space-y-4">
 
@@ -359,3 +359,4 @@ export default function ResumeCenter() {
   );
 }
 export { ResumeCenter };
+

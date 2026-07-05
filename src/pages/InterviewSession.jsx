@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { AIAvatar } from '../components/AIAvatar';
 import { StrictModeGuard } from '../components/StrictModeGuard';
 import { DifficultySelector } from '../components/DifficultySelector';
@@ -137,7 +137,7 @@ export default function InterviewSession() {
       // Fetch today's questions to prevent duplication
       let todayAsked = [];
       try {
-        const questionEntries = await base44.entities.QuestionBank.filter({
+        const questionEntries = await iqClient.entities.QuestionBank.filter({
           asked_date: todayString,
           role: activeRole
         });
@@ -163,7 +163,7 @@ export default function InterviewSession() {
       // Fetch user's previous completed interviews for adaptive questions
       let memoryContext = '';
       try {
-        const list = await base44.entities.Interview.list();
+        const list = await iqClient.entities.Interview.list();
         const history = (list || []).filter(i => i.status === 'completed' && i.created_by === user?.email);
         if (history.length > 0) {
           const avgTech = history.reduce((acc, c) => acc + (c.technical_score || 0), 0) / history.length;
@@ -205,7 +205,7 @@ export default function InterviewSession() {
       Core skills declared: ${profile.skills}
       ${resumeContext ? `Resume intelligence:\n${resumeContext}` : ''}
       ${memoryContext ? `\n${memoryContext}` : ''}
-      Questions already asked today — NEVER repeat these: ${JSON.stringify(todayAsked)}
+      Questions already asked today â€” NEVER repeat these: ${JSON.stringify(todayAsked)}
 
       Rules:
       - Questions MUST reference the candidate's actual skills and resume details where possible
@@ -221,7 +221,7 @@ export default function InterviewSession() {
       { "questions": ["Question 1...", ...] }
       Output raw JSON only. No markdown, no extra text.`;
 
-      const res = await base44.integrations.Core.InvokeLLM({ prompt });
+      const res = await iqClient.integrations.Core.InvokeLLM({ prompt });
       const cleanText = (res.text || res || "{}")
         .replace(/```json/g, '')
         .replace(/```/g, '')
@@ -245,7 +245,7 @@ export default function InterviewSession() {
           question_type: 'general',
           asked_date: todayString
         }));
-        await base44.entities.QuestionBank.bulkCreate(bankPayload);
+        await iqClient.entities.QuestionBank.bulkCreate(bankPayload);
       } catch (saveErr) {
         console.error("Error logging to question bank:", saveErr);
       }
@@ -297,7 +297,7 @@ export default function InterviewSession() {
       }
 
       // Create Interview database entity
-      const newInterview = await base44.entities.Interview.create({
+      const newInterview = await iqClient.entities.Interview.create({
         status: 'in_progress',
         questions_asked: 9,
         job_role: getActiveRole(profile),
@@ -307,7 +307,7 @@ export default function InterviewSession() {
 
       // Update UserProfile daily count
       const currentCount = profile.daily_interviews_count || 0;
-      await base44.entities.UserProfile.update(profile.id, {
+      await iqClient.entities.UserProfile.update(profile.id, {
         daily_interviews_count: currentCount + 1,
         last_interview_date: todayString
       });
@@ -354,8 +354,8 @@ export default function InterviewSession() {
       const firstName = (profile?.full_name || 'there').split(' ')[0];
       const isNewUser = !profile?.last_interview_date;
       const welcomeMsg = isNewUser
-        ? `Welcome ${firstName}! I'm your AI interviewer. Before we begin, please take a moment to introduce yourself — tell me about your background, skills, and what you're looking for in your next role.`
-        : `Welcome back ${firstName}! Great to have you here for another practice session. Let's get started — please briefly introduce yourself and share what you've been working on recently.`;
+        ? `Welcome ${firstName}! I'm your AI interviewer. Before we begin, please take a moment to introduce yourself â€” tell me about your background, skills, and what you're looking for in your next role.`
+        : `Welcome back ${firstName}! Great to have you here for another practice session. Let's get started â€” please briefly introduce yourself and share what you've been working on recently.`;
       speakQuestion(welcomeMsg);
     } else {
       speakQuestion(questions[currentQIdx]);
@@ -525,7 +525,7 @@ export default function InterviewSession() {
         // Retrieve past history to enable comparison
         let pastSummary = '';
         try {
-          const list = await base44.entities.Interview.list();
+          const list = await iqClient.entities.Interview.list();
           const history = (list || []).filter(i => i.status === 'completed' && i.created_by === user?.email && i.id !== interviewIdRef.current);
           if (history.length > 0) {
             const lastRound = history[history.length - 1];
@@ -620,7 +620,7 @@ Compare the current performance with these previous metrics. In the suggestions,
         }
         Return raw JSON output. Do not include markdown code block characters (\`\`\`) or extra text.`;
 
-        const evalRes = await base44.integrations.Core.InvokeLLM({ prompt: evaluationPrompt });
+        const evalRes = await iqClient.integrations.Core.InvokeLLM({ prompt: evaluationPrompt });
         const cleanEvalText = (evalRes.text || evalRes || "{}")
           .replace(/```json/g, '')
           .replace(/```/g, '')
@@ -649,7 +649,7 @@ Compare the current performance with these previous metrics. In the suggestions,
       }
 
       // Update Interview entry in database
-      const updatedInterview = await base44.entities.Interview.update(interviewIdRef.current, {
+      const updatedInterview = await iqClient.entities.Interview.update(interviewIdRef.current, {
         status: 'completed',
         duration_seconds: durationSeconds,
         transcript: JSON.stringify(finalTranscript),
@@ -686,7 +686,7 @@ Compare the current performance with these previous metrics. In the suggestions,
       
       // Attempt saving partial draft
       try {
-        await base44.entities.Interview.update(interviewIdRef.current, {
+        await iqClient.entities.Interview.update(interviewIdRef.current, {
           status: 'completed',
           duration_seconds: durationSeconds,
           transcript: JSON.stringify(finalTranscript),
@@ -836,7 +836,7 @@ Compare the current performance with these previous metrics. In the suggestions,
                 />
                 <span className="absolute bottom-3 left-3 text-[9px] bg-slate-950/80 px-2 py-1 rounded text-white font-semibold flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
-                  Live · {profile?.full_name?.split(' ')[0] || 'You'}
+                  Live Â· {profile?.full_name?.split(' ')[0] || 'You'}
                 </span>
               </div>
 
@@ -851,7 +851,7 @@ Compare the current performance with these previous metrics. In the suggestions,
                 <div className="space-y-1.5">
                   <p className="text-xs text-slate-300 leading-relaxed italic">
                     {isSpeaking 
-                      ? "⌛ Wait for the question to finish..." 
+                      ? "âŒ› Wait for the question to finish..." 
                       : userAnswer || "(Speak now or type response...)"}
                   </p>
                 </div>
@@ -873,13 +873,13 @@ Compare the current performance with these previous metrics. In the suggestions,
                   onClick={handleNextQuestion}
                   className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white rounded-lg py-3 text-xs font-bold w-full transition-all active:scale-[0.98] flex items-center justify-center gap-1"
                 >
-                  {isWelcome ? 'Done, Start Interview →' : currentQIdx === questions.length - 1 ? 'Complete Evaluation →' : 'Next Question →'}
+                  {isWelcome ? 'Done, Start Interview â†’' : currentQIdx === questions.length - 1 ? 'Complete Evaluation â†’' : 'Next Question â†’'}
                 </button>
 
                 {/* Warning message under next button if empty answer */}
                 {!userAnswer && !isSpeaking && (
                   <p className="text-[10px] text-amber-500/90 font-medium flex items-center justify-center gap-1.5 mt-2">
-                    ⚠️ No answer detected — will be marked as skipped
+                    âš ï¸ No answer detected â€” will be marked as skipped
                   </p>
                 )}
               </div>
@@ -911,9 +911,9 @@ Compare the current performance with these previous metrics. In the suggestions,
   // Setup / Welcome Configuration screen
   const LANGUAGES = [
     { value: 'en-US', code: 'US', label: 'English', sub: 'English (US)' },
-    { value: 'hi-IN', code: 'IN', label: 'Hindi',   sub: 'हिंदी' },
-    { value: 'te-IN', code: 'IN', label: 'Telugu',  sub: 'తెలుగు' },
-    { value: 'ta-IN', code: 'IN', label: 'Tamil',   sub: 'தமிழ்' },
+    { value: 'hi-IN', code: 'IN', label: 'Hindi',   sub: 'à¤¹à¤¿à¤‚à¤¦à¥€' },
+    { value: 'te-IN', code: 'IN', label: 'Telugu',  sub: 'à°¤à±†à°²à±à°—à±' },
+    { value: 'ta-IN', code: 'IN', label: 'Tamil',   sub: 'à®¤à®®à®¿à®´à¯' },
   ];
 
   return (
@@ -964,7 +964,7 @@ Compare the current performance with these previous metrics. In the suggestions,
         {/* Language selection */}
         <div className="space-y-3 border-t border-white/5 pt-6">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-            🌐 Interview Language
+            ðŸŒ Interview Language
           </p>
           <div className="grid grid-cols-2 gap-3">
             {LANGUAGES.map(lang => (
@@ -1000,10 +1000,10 @@ Compare the current performance with these previous metrics. In the suggestions,
         {/* Rules box */}
         <div className="bg-[#0e0f1e] border border-white/8 rounded-xl p-5 space-y-2.5">
           {[
-            { text: <><strong className="text-white">Speak clearly</strong> — your mic captures your answers live</>, normal: true },
+            { text: <><strong className="text-white">Speak clearly</strong> â€” your mic captures your answers live</>, normal: true },
             { text: 'The AI interviewer will speak each question aloud', normal: true },
             { text: <>Click <strong className="text-white">"Next Question"</strong> when done answering</>, normal: true },
-            { text: <><span className="text-rose-400 font-semibold">No answers = 0 score</span> — the AI evaluates honestly</>, normal: false },
+            { text: <><span className="text-rose-400 font-semibold">No answers = 0 score</span> â€” the AI evaluates honestly</>, normal: false },
             { text: 'Use Chrome for best speech recognition support', normal: true },
           ].map((rule, i) => (
             <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
@@ -1031,3 +1031,4 @@ Compare the current performance with these previous metrics. In the suggestions,
   );
 }
 export { InterviewSession };
+

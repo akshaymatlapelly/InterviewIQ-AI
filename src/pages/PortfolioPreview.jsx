@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 
 import { 
   Github, 
@@ -205,7 +205,7 @@ export default function PortfolioPreview({ data: propsData, theme: propsTheme })
 
       if (targetEmail) {
         try {
-          const profiles = await base44.entities.UserProfile.filter({ email: targetEmail });
+          const profiles = await iqClient.entities.UserProfile.filter({ email: targetEmail });
           if (profiles && profiles.length > 0) {
             const profile = profiles[0];
             if (profile.portfolio_data) {
@@ -749,7 +749,7 @@ export default function PortfolioPreview({ data: propsData, theme: propsTheme })
 
         {/* Footer block */}
         <div className="w-full border-t border-white/5 pt-8 mt-12 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500 font-bold tracking-wide">
-          <p>© {new Date().getFullYear()} {data.personalInfo.fullName}. All rights reserved.</p>
+          <p>Â© {new Date().getFullYear()} {data.personalInfo.fullName}. All rights reserved.</p>
           
           <div className="flex gap-4">
             {data.socialLinks.github && <a href={ensureAbsoluteUrl(data.socialLinks.github)} target="_blank" rel="noreferrer" className="hover:text-slate-300"><Github size={12} /></a>}
@@ -757,7 +757,7 @@ export default function PortfolioPreview({ data: propsData, theme: propsTheme })
             {data.socialLinks.youtube && <a href={ensureAbsoluteUrl(data.socialLinks.youtube)} target="_blank" rel="noreferrer" className="hover:text-slate-300"><Youtube size={12} /></a>}
           </div>
 
-          <p>Made with ❤️ and passion</p>
+          <p>Made with â¤ï¸ and passion</p>
         </div>
       </section>
 
@@ -777,3 +777,4 @@ function SocialRow({ links, email }) {
     </div>
   );
 }
+

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { 
   Briefcase, 
   TrendingUp, 
@@ -26,7 +26,7 @@ export default function JobMatching() {
       // Mock score summaries or profiles parsing
       let scoreSummary = [];
       try {
-        const list = await base44.entities.Interview.list();
+        const list = await iqClient.entities.Interview.list();
         const completed = (list || [])
           .filter(i => i.status === 'completed' && i.created_by === profile?.email)
           .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
@@ -74,7 +74,7 @@ export default function JobMatching() {
       ]
       Do not include markdown code block characters (\`\`\`) or extra conversational remarks.`;
 
-      const res = await base44.integrations.Core.InvokeLLM({ prompt });
+      const res = await iqClient.integrations.Core.InvokeLLM({ prompt });
       const cleanText = (res.text || res || "[]")
         .replace(/```json/g, '')
         .replace(/```/g, '')
@@ -94,7 +94,7 @@ export default function JobMatching() {
 
   // Truncate skills list for the profile card summary
   const getTruncatedSkills = (skillsString) => {
-    if (!skillsString) return '—';
+    if (!skillsString) return 'â€”';
     const list = skillsString.split(',').map(s => s.trim());
     if (list.length <= 4) return skillsString;
     return list.slice(0, 4).join(', ') + ', ...';
@@ -144,7 +144,7 @@ export default function JobMatching() {
           </div>
           <div className="space-y-1">
             <span className="text-slate-500 font-semibold block">Education:</span>
-            <span className="text-slate-200 font-bold">{profile?.degree || '—'}</span>
+            <span className="text-slate-200 font-bold">{profile?.degree || 'â€”'}</span>
           </div>
           <div className="space-y-1">
             <span className="text-slate-500 font-semibold block">Skills:</span>
@@ -276,3 +276,4 @@ export default function JobMatching() {
   );
 }
 export { JobMatching };
+

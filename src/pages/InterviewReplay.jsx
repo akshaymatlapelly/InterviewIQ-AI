@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Button } from '../components/ui/Button';
 import { 
   AreaChart, 
@@ -74,7 +74,7 @@ export default function InterviewReplay() {
   useEffect(() => {
     const fetchReplay = async () => {
       try {
-        const data = await base44.entities.Interview.get(interviewId);
+        const data = await iqClient.entities.Interview.get(interviewId);
         setInterview(data);
         if (data) {
           if (data.transcript) {
@@ -331,3 +331,4 @@ export default function InterviewReplay() {
   );
 }
 export { InterviewReplay };
+

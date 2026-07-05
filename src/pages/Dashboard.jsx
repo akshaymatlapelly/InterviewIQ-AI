@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { StatsCards } from '../components/dashboard/StatsCards';
 import { PerformanceCharts } from '../components/dashboard/PerformanceCharts';
 import { Button } from '../components/ui/Button';
@@ -50,7 +50,7 @@ export default function Dashboard() {
       const fetchInterviews = async () => {
         try {
           // List interviews; filter locally or by created_by if available
-          const list = await base44.entities.Interview.list();
+          const list = await iqClient.entities.Interview.list();
           const sorted = (list || [])
             .filter(i => i.created_by === user?.email)
             .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));

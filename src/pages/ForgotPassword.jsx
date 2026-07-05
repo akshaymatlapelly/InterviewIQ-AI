@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { AuthLayout } from '../components/AuthLayout';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
@@ -19,7 +19,7 @@ export default function ForgotPassword() {
 
     setLoading(true);
     try {
-      await base44.auth.resetPasswordRequest(email);
+      await iqClient.auth.resetPasswordRequest(email);
       setSent(true);
       toast.success("Reset email sent! Please check your inbox.");
     } catch (err) {
@@ -97,3 +97,4 @@ export default function ForgotPassword() {
     </AuthLayout>
   );
 }
+

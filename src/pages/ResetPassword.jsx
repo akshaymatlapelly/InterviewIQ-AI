@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { AuthLayout } from '../components/AuthLayout';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
@@ -44,7 +44,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      await base44.auth.resetPassword({
+      await iqClient.auth.resetPassword({
         resetToken: token,
         newPassword: password
       });
@@ -118,7 +118,7 @@ export default function ResetPassword() {
             <Input
               id="new-pass"
               type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -142,7 +142,7 @@ export default function ResetPassword() {
             <Input
               id="confirm-pass"
               type={showConfirmPassword ? "text" : "password"}
-              placeholder="••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -174,3 +174,4 @@ export default function ResetPassword() {
     </AuthLayout>
   );
 }
+

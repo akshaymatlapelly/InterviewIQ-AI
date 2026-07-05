@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { base44 } from '../api/base44Client';
+﻿import React, { useEffect, useState } from 'react';
+import { iqClient } from '../api/iqClient';
 import { 
   Trophy, 
   Medal, 
@@ -19,7 +19,7 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       try {
         // Fetch completed interviews sorted by overall_score descending
-        const list = await base44.entities.Interview.list();
+        const list = await iqClient.entities.Interview.list();
         const completed = (list || [])
           .filter(i => i.status === 'completed' && typeof i.overall_score === 'number')
           .sort((a, b) => b.overall_score - a.overall_score);
@@ -159,3 +159,4 @@ export default function Leaderboard() {
   );
 }
 export { Leaderboard };
+

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
@@ -60,7 +60,7 @@ export default function Profile() {
 
     setSaving(true);
     try {
-      await base44.entities.UserProfile.update(profile.id, form);
+      await iqClient.entities.UserProfile.update(profile.id, form);
       toast.success("Profile details updated successfully!");
       await refetchProfile();
     } catch (err) {
@@ -181,3 +181,4 @@ export default function Profile() {
   );
 }
 export { Profile };
+

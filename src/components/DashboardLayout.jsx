@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
 import { VoiceNav } from './VoiceNav';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { sendDailyMissedReminder, sendWeeklyReportEmail } from '../utils/emailService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -34,7 +34,7 @@ export function DashboardLayout() {
   const { logout, user, profile } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // ── Feedback Widget States ───────────────────────────────────────────────
+  // â”€â”€ Feedback Widget States â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackName, setFeedbackName] = useState('');
   const [likedFeatures, setLikedFeatures] = useState('');
@@ -61,7 +61,7 @@ export function DashboardLayout() {
     try {
       const emailHtml = `
         <div style="background-color: #0b0c16; color: #f1f3f9; padding: 32px; font-family: sans-serif; max-width: 600px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); margin: 0 auto;">
-          <h2 style="color: #8b5cf6; font-size: 24px; font-weight: 900; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; text-align: center;">💬 New Application Feedback</h2>
+          <h2 style="color: #8b5cf6; font-size: 24px; font-weight: 900; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; text-align: center;">ðŸ’¬ New Application Feedback</h2>
           <p style="color: #cbd5e1; font-size: 14px; margin-top: 16px;">Hello Owner, you have received new feedback about your application features and project:</p>
           
           <div style="margin: 24px 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
@@ -72,7 +72,7 @@ export function DashboardLayout() {
               </tr>
               <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                 <td style="padding: 10px; font-weight: bold; color: #94a3b8;">Rating</td>
-                <td style="padding: 10px; color: #ffb800; font-weight: bold; font-size: 16px;">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)} (${rating}/5 Stars)</td>
+                <td style="padding: 10px; color: #ffb800; font-weight: bold; font-size: 16px;">${'â˜…'.repeat(rating)}${'â˜†'.repeat(5 - rating)} (${rating}/5 Stars)</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                 <td style="padding: 10px; font-weight: bold; color: #94a3b8;">Liked Features</td>
@@ -91,13 +91,13 @@ export function DashboardLayout() {
         </div>
       `;
 
-      await base44.integrations.Core.SendEmail({
+      await iqClient.integrations.Core.SendEmail({
         to: 'akvibes.official143@gmail.com',
-        subject: `⭐️ Feedback Received from ${feedbackName} (${rating}/5 Stars) | InterviewIQ AI`,
+        subject: `â­ï¸ Feedback Received from ${feedbackName} (${rating}/5 Stars) | InterviewIQ AI`,
         html: emailHtml
       });
 
-      toast.success('Thank you! Feedback sent successfully.', { icon: '❤️' });
+      toast.success('Thank you! Feedback sent successfully.', { icon: 'â¤ï¸' });
       setShowFeedback(false);
       setRemarks('');
       setLikedFeatures('');
@@ -133,7 +133,7 @@ export function DashboardLayout() {
 
           if (lastSentDate !== todayStr) {
             // Check if user completed any interviews today
-            const interviews = await base44.entities.Interview.list();
+            const interviews = await iqClient.entities.Interview.list();
             const completedToday = (interviews || []).some(
               i => i.status === 'completed' && i.created_by === profile.email && i.created_date?.startsWith(todayStr)
             );
@@ -156,7 +156,7 @@ export function DashboardLayout() {
 
           if (now.getTime() - lastSentTime >= ONE_WEEK_MS) {
             // Fetch interviews from the past 7 days
-            const interviews = await base44.entities.Interview.list();
+            const interviews = await iqClient.entities.Interview.list();
             const sevenDaysAgo = new Date(now.getTime() - ONE_WEEK_MS);
             const weeklyAttempts = (interviews || [])
               .filter(
@@ -367,7 +367,7 @@ export function DashboardLayout() {
           </aside>
         </div>
       )}
-      {/* ── FLOATING FEEDBACK BUTTON ───────────────────────────────────────── */}
+      {/* â”€â”€ FLOATING FEEDBACK BUTTON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="fixed bottom-6 right-6 z-[100]">
         <button
           onClick={() => setShowFeedback(true)}
@@ -381,7 +381,7 @@ export function DashboardLayout() {
         </button>
       </div>
 
-      {/* ── FLOATING FEEDBACK FORM ─────────────────────────────────────────── */}
+      {/* â”€â”€ FLOATING FEEDBACK FORM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <AnimatePresence>
         {showFeedback && (
           <motion.div
@@ -483,3 +483,4 @@ export function DashboardLayout() {
     </div>
   );
 }
+

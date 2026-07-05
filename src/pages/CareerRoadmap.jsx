@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useAuth } from '../lib/AuthContext';
-import { base44 } from '../api/base44Client';
+import { iqClient } from '../api/iqClient';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
@@ -43,7 +43,7 @@ export default function CareerRoadmap() {
       // Gather interview history gaps
       let historyContext = "";
       try {
-        const list = await base44.entities.Interview.list();
+        const list = await iqClient.entities.Interview.list();
         const completed = (list || [])
           .filter(i => i.status === 'completed' && i.created_by === profile?.email)
           .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
@@ -130,7 +130,7 @@ export default function CareerRoadmap() {
       }
       Return ONLY raw JSON. Do not include markdown code block characters (\`\`\`) or conversational text.`;
 
-      const res = await base44.integrations.Core.InvokeLLM({ prompt });
+      const res = await iqClient.integrations.Core.InvokeLLM({ prompt });
       const cleanText = (res.text || res || "{}")
         .replace(/```json/g, '')
         .replace(/```/g, '')
@@ -362,3 +362,4 @@ export default function CareerRoadmap() {
   );
 }
 export { CareerRoadmap };
+

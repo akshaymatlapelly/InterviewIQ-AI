@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { base44 } from '../api/base44Client';
+﻿import React, { useState, useEffect, useRef } from 'react';
+import { iqClient } from '../api/iqClient';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import ReactMarkdown from 'react-markdown';
@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner';
 
 export default function AITips() {
-  // ── ChatGPT Chat States ──────────────────────────────────────────────────
+  // â”€â”€ ChatGPT Chat States â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! I am your AI Career Coach. Ask me any interview prep or career question, and I will give you a quick 1-2 line tip!' }
   ]);
@@ -42,7 +42,7 @@ export default function AITips() {
       // Build conversation context
       const chatHistory = messages.slice(-5).map(m => `${m.role === 'user' ? 'User' : 'Coach'}: ${m.content}`).join('\n');
       
-      const res = await base44.integrations.Core.InvokeLLM({
+      const res = await iqClient.integrations.Core.InvokeLLM({
         prompt: `You are an expert technical recruiting coach and career advisor.
 Answer the candidate's career question.
 Strict Constraint: Provide a response of EXACTLY one or two sentences (1-2 lines) only. Do not exceed 2 sentences.
@@ -68,7 +68,7 @@ New Question: ${userMsg}`
   const prepTips = [
     {
       title: "STAR Method",
-      desc: "Answer questions using: Situation (setup) ➜ Task (goal) ➜ Action (what you did) ➜ Result (final outcome).",
+      desc: "Answer questions using: Situation (setup) âžœ Task (goal) âžœ Action (what you did) âžœ Result (final outcome).",
       icon: MessageSquare,
       color: "text-violet-400"
     },
@@ -179,3 +179,4 @@ New Question: ${userMsg}`
     </div>
   );
 }
+
