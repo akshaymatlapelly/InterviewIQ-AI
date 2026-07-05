@@ -1,0 +1,58 @@
+{
+  "name": "Interview",
+  "fields": [
+    {
+      "name": "status",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "duration_seconds",
+      "type": "number"
+    },
+    {
+      "name": "questions_asked",
+      "type": "number"
+    },
+    {
+      "name": "transcript",
+      "type": "string"
+    },
+    {
+      "name": "overall_score",
+      "type": "number"
+    },
+    {
+      "name": "technical_score",
+      "type": "number"
+    },
+    {
+      "name": "communication_score",
+      "type": "number"
+    },
+    {
+      "name": "confidence_score",
+      "type": "number"
+    },
+    {
+      "name": "fluency_score",
+      "type": "number"
+    },
+    {
+      "name": "grammar_score",
+      "type": "number"
+    },
+    {
+      "name": "hr_score",
+      "type": "number"
+    },
+    {
+      "name": "feedback_json",
+      "type": "string"
+    },
+    {
+      "name": "job_role",
+      "type": "string"
+    }
+  ]
+}

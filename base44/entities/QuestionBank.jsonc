@@ -1,0 +1,27 @@
+{
+  "name": "QuestionBank",
+  "fields": [
+    {
+      "name": "question_text",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "role",
+      "type": "string"
+    },
+    {
+      "name": "difficulty",
+      "type": "string"
+    },
+    {
+      "name": "question_type",
+      "type": "string"
+    },
+    {
+      "name": "asked_date",
+      "type": "string",
+      "required": true
+    }
+  ]
+}

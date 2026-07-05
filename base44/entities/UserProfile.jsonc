@@ -1,0 +1,95 @@
+{
+  "name": "UserProfile",
+  "fields": [
+    {
+      "name": "full_name",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "phone",
+      "type": "string"
+    },
+    {
+      "name": "date_of_birth",
+      "type": "string"
+    },
+    {
+      "name": "gender",
+      "type": "string"
+    },
+    {
+      "name": "current_status",
+      "type": "string"
+    },
+    {
+      "name": "college_name",
+      "type": "string"
+    },
+    {
+      "name": "degree",
+      "type": "string"
+    },
+    {
+      "name": "branch",
+      "type": "string"
+    },
+    {
+      "name": "graduation_year",
+      "type": "string"
+    },
+    {
+      "name": "current_company",
+      "type": "string"
+    },
+    {
+      "name": "experience_level",
+      "type": "string"
+    },
+    {
+      "name": "preferred_job_role",
+      "type": "string"
+    },
+    {
+      "name": "skills",
+      "type": "string"
+    },
+    {
+      "name": "linkedin_url",
+      "type": "string"
+    },
+    {
+      "name": "github_url",
+      "type": "string"
+    },
+    {
+      "name": "portfolio_url",
+      "type": "string"
+    },
+    {
+      "name": "resume_url",
+      "type": "string"
+    },
+    {
+      "name": "resume_analysis",
+      "type": "string"
+    },
+    {
+      "name": "onboarding_complete",
+      "type": "boolean"
+    },
+    {
+      "name": "daily_interviews_count",
+      "type": "number"
+    },
+    {
+      "name": "last_interview_date",
+      "type": "string"
+    }
+  ]
+}
