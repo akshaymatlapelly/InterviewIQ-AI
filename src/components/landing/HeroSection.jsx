@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, Zap, Video, FileText, Database, MessageSquare } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export function HeroSection() {
@@ -17,6 +17,63 @@ export function HeroSection() {
           <div key={i} className="w-[1px] h-full bg-white" />
         ))}
       </div>
+
+      {/* Premium Floating Cards (Left/Right margins) */}
+      <motion.div
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute left-[3%] top-[25%] lg:left-[6%] lg:top-[28%] hidden md:flex items-center gap-3 glass p-4 rounded-xl border border-violet-500/20 bg-violet-950/25 backdrop-blur-lg shadow-[0_0_30px_rgba(139,92,246,0.12)] hover:border-violet-500/40 hover:scale-105 hover:shadow-[0_0_40px_rgba(139,92,246,0.25)] transition-all duration-300 pointer-events-auto z-20 cursor-default"
+      >
+        <div className="w-9 h-9 rounded-lg bg-violet-500/15 flex items-center justify-center text-violet-400">
+          <Video className="w-5 h-5" />
+        </div>
+        <div className="text-left">
+          <div className="text-xs font-bold text-white tracking-wide">Interactive AI Avatar</div>
+          <div className="text-[10px] text-slate-400 font-medium">Voice-to-voice sessions</div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+        className="absolute right-[3%] top-[25%] lg:right-[6%] lg:top-[28%] hidden md:flex items-center gap-3 glass p-4 rounded-xl border border-cyan-500/20 bg-cyan-950/25 backdrop-blur-lg shadow-[0_0_30px_rgba(6,182,212,0.12)] hover:border-cyan-500/40 hover:scale-105 hover:shadow-[0_0_40px_rgba(6,182,212,0.25)] transition-all duration-300 pointer-events-auto z-20 cursor-default"
+      >
+        <div className="w-9 h-9 rounded-lg bg-cyan-500/15 flex items-center justify-center text-cyan-400">
+          <FileText className="w-5 h-5" />
+        </div>
+        <div className="text-left">
+          <div className="text-xs font-bold text-white tracking-wide">ATS Resume Scorer</div>
+          <div className="text-[10px] text-slate-400 font-medium">Dynamic keyword matcher</div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute left-[5%] bottom-[16%] lg:left-[10%] lg:bottom-[20%] hidden lg:flex items-center gap-3 glass p-4 rounded-xl border border-pink-500/20 bg-pink-950/25 backdrop-blur-lg shadow-[0_0_30px_rgba(236,72,153,0.12)] hover:border-pink-500/40 hover:scale-105 hover:shadow-[0_0_40px_rgba(236,72,153,0.25)] transition-all duration-300 pointer-events-auto z-20 cursor-default"
+      >
+        <div className="w-9 h-9 rounded-lg bg-pink-500/15 flex items-center justify-center text-pink-400">
+          <Database className="w-5 h-5" />
+        </div>
+        <div className="text-left">
+          <div className="text-xs font-bold text-white tracking-wide">AI Memory Engine</div>
+          <div className="text-[10px] text-slate-400 font-medium">Tracks long-term growth</div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        animate={{ y: [0, -14, 0] }}
+        transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        className="absolute right-[5%] bottom-[16%] lg:right-[10%] lg:bottom-[20%] hidden lg:flex items-center gap-3 glass p-4 rounded-xl border border-amber-500/20 bg-amber-950/25 backdrop-blur-lg shadow-[0_0_30px_rgba(245,158,11,0.12)] hover:border-amber-500/40 hover:scale-105 hover:shadow-[0_0_40px_rgba(245,158,11,0.25)] transition-all duration-300 pointer-events-auto z-20 cursor-default"
+      >
+        <div className="w-9 h-9 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-400">
+          <MessageSquare className="w-5 h-5" />
+        </div>
+        <div className="text-left">
+          <div className="text-xs font-bold text-white tracking-wide">AI Career Coach</div>
+          <div className="text-[10px] text-slate-400 font-medium">Personalized placement tips</div>
+        </div>
+      </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="text-center space-y-8 max-w-4xl mx-auto">

@@ -1,4 +1,4 @@
-﻿// InterviewIQ AI - Client-Side database and AI integration layer.
+// InterviewIQ AI - Client-Side database and AI integration layer.
 // Persistent storage is handled locally via browser localStorage.
 
 class MockEntity {
@@ -193,15 +193,17 @@ export const iqClient = {
     
     async loginViaEmailPassword(email, password) {
       const users = getMockUsers();
-      const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      const trimmedEmail = email ? email.trim().toLowerCase() : "";
+      const trimmedPassword = password ? password.trim() : "";
+      const found = users.find(u => u.email.trim().toLowerCase() === trimmedEmail);
       
-      if (!found || found.password !== password) {
+      if (!found || found.password.trim() !== trimmedPassword) {
         throw new Error("Invalid email ID or password. If you are a new user, please click 'Get Started' to register.");
       }
       
       const loggedUser = {
         id: found.id,
-        email: found.email.toLowerCase(),
+        email: found.email.trim().toLowerCase(),
         full_name: found.full_name,
         role: 'user'
       };
@@ -212,7 +214,9 @@ export const iqClient = {
 
     async register({ email, password, full_name }) {
       const users = getMockUsers();
-      const exists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+      const trimmedEmail = email ? email.trim().toLowerCase() : "";
+      const trimmedPassword = password ? password.trim() : "";
+      const exists = users.some(u => u.email.trim().toLowerCase() === trimmedEmail);
       
       if (exists) {
         throw new Error("An account with this email address already exists.");
@@ -220,8 +224,8 @@ export const iqClient = {
       
       const newUser = {
         id: Math.random().toString(36).substring(2, 9),
-        email: email.toLowerCase(),
-        password,
+        email: trimmedEmail,
+        password: trimmedPassword,
         full_name,
         created_date: new Date().toISOString()
       };
@@ -251,22 +255,23 @@ export const iqClient = {
     },
 
     async resetPasswordRequest(email) {
-      console.log("Mock resetting password requested for:", email);
+      const trimmedEmail = email ? email.trim().toLowerCase() : "";
+      console.log("Mock resetting password requested for:", trimmedEmail);
       
       const users = getMockUsers();
-      const userExists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+      const userExists = users.some(u => u.email.trim().toLowerCase() === trimmedEmail);
       
       if (!userExists) {
         throw new Error("No account was found with that email address.");
       }
 
       // Generate base64 token of email
-      const token = btoa(email.toLowerCase());
+      const token = btoa(trimmedEmail);
       const resetLink = `${window.location.origin}/reset-password?token=${token}`;
 
       // Send Reset Link via Email
       await iqClient.integrations.Core.SendEmail({
-        to: email,
+        to: trimmedEmail,
         subject: "Reset Your Password - InterviewIQ AI",
         html: `
           <div style="font-family: sans-serif; max-width: 500px; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -293,20 +298,20 @@ export const iqClient = {
       
       let email = '';
       try {
-        email = atob(resetToken);
+        email = atob(resetToken).trim().toLowerCase();
       } catch(e) {
         throw new Error("Invalid or expired reset token.");
       }
 
       const users = getMockUsers();
-      const idx = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+      const idx = users.findIndex(u => u.email.trim().toLowerCase() === email);
 
       if (idx === -1) {
         throw new Error("No account associated with this reset request was found.");
       }
 
       // Update password
-      users[idx].password = newPassword;
+      users[idx].password = newPassword ? newPassword.trim() : "";
       localStorage.setItem('iq_users', JSON.stringify(users));
       
       console.log(`Password updated successfully for: ${email}`);
