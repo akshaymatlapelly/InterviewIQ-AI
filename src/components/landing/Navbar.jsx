@@ -22,18 +22,18 @@ export function Navbar() {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       scrolled 
-        ? 'bg-[#0b0c16]/90 backdrop-blur-md border-b border-white/5 py-4' 
+        ? 'bg-[#0b0c16]/75 backdrop-blur-xl border-b border-violet-500/20 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.4)]' 
         : 'bg-transparent py-6'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)] animate-pulse-glow">
-            <BrainCircuit className="text-white w-5 h-5" />
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)] group-hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] group-hover:scale-105 transition-all duration-300">
+            <BrainCircuit className="text-white w-5 h-5 animate-pulse" />
           </div>
-          <span className="font-display font-bold text-lg text-white tracking-tight">InterviewIQ AI</span>
+          <span className="font-display font-bold text-lg text-white tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-violet-400 group-hover:to-cyan-400 transition-all duration-300">InterviewIQ AI</span>
         </Link>
 
         {/* Desktop Nav Links */}
@@ -42,20 +42,22 @@ export function Navbar() {
             <a
               key={link.name}
               href={link.href}
-              className="text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+              className="text-xs font-semibold text-slate-400 hover:text-white transition-colors relative group py-1"
             >
               {link.name}
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-violet-500 to-cyan-500 transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
 
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/login" className="text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+          <Link to="/login" className="text-xs font-semibold text-slate-400 hover:text-white transition-colors relative group py-1">
             Log in
+            <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-violet-500 transition-all duration-300 group-hover:w-full" />
           </Link>
           <Link to="/register">
-            <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] active:scale-[0.98]">
+            <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 hover:scale-105 active:scale-[0.98] transition-all duration-300 shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)]">
               Get Started
             </button>
           </Link>
