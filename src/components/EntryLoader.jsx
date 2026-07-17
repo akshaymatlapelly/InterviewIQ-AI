@@ -133,12 +133,12 @@ export function EntryLoader({ onComplete }) {
 
       if (elapsed < 1000) {
         // --- STAGE 1: Orb Pulse & Orbit (0ms - 1000ms) ---
-        const fadeIn = Math.min(1, elapsed / 300);
+        const fadeIn = Math.max(0, Math.min(1, elapsed / 300));
         
         // Gentlest pulse
         const pulse = 1 + Math.sin(elapsed * 0.008) * 0.07;
-        const pulseScale = (elapsed > 700) ? pulse * (1 + (elapsed - 700) * 0.0012) : pulse; // Expand at the end of Stage 1
-        const orbRadius = 24 * pulseScale * fadeIn;
+        const pulseScale = Math.max(0.1, (elapsed > 700) ? pulse * (1 + (elapsed - 700) * 0.0012) : pulse); // Expand at the end of Stage 1
+        const orbRadius = Math.max(0, 24 * pulseScale * fadeIn);
 
         // Draw central orb shadow glow (Expensive volumetric bloom feeling)
         ctx.save();
