@@ -29,45 +29,59 @@ import CareerRoadmap from './pages/CareerRoadmap';
 import JobMatching from './pages/JobMatching';
 import AIPortfolioBuilder from './pages/AIPortfolioBuilder';
 import PortfolioPreview from './pages/PortfolioPreview';
+import { EntryLoader } from './components/EntryLoader';
 
 export default function App() {
+  const [showLoader, setShowLoader] = React.useState(() => {
+    return !sessionStorage.getItem('iq_entry_loaded');
+  });
+
+  const handleLoaderComplete = () => {
+    sessionStorage.setItem('iq_entry_loaded', 'true');
+    setShowLoader(false);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/portfolio-preview" element={<PortfolioPreview />} />
+        {showLoader ? (
+          <EntryLoader onComplete={handleLoaderComplete} />
+        ) : (
+          <BrowserRouter>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/portfolio-preview" element={<PortfolioPreview />} />
 
-            {/* Onboarding without sidebar */}
-            <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+              {/* Onboarding without sidebar */}
+              <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
 
-            {/* Protected Routes (under proctored layouts) */}
-            <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/interview" element={<InterviewSession />} />
-              <Route path="/history" element={<InterviewHistory />} />
-              <Route path="/feedback/:interviewId" element={<FeedbackReport />} />
-              <Route path="/resume" element={<ResumeCenter />} />
-              <Route path="/tips" element={<AITips />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/replay/:interviewId" element={<InterviewReplay />} />
-              <Route path="/roadmap" element={<CareerRoadmap />} />
-              <Route path="/jobs" element={<JobMatching />} />
-              <Route path="/portfolio" element={<AIPortfolioBuilder />} />
-            </Route>
+              {/* Protected Routes (under proctored layouts) */}
+              <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/interview" element={<InterviewSession />} />
+                <Route path="/history" element={<InterviewHistory />} />
+                <Route path="/feedback/:interviewId" element={<FeedbackReport />} />
+                <Route path="/resume" element={<ResumeCenter />} />
+                <Route path="/tips" element={<AITips />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/replay/:interviewId" element={<InterviewReplay />} />
+                <Route path="/roadmap" element={<CareerRoadmap />} />
+                <Route path="/jobs" element={<JobMatching />} />
+                <Route path="/portfolio" element={<AIPortfolioBuilder />} />
+              </Route>
 
-            {/* 404 Route */}
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </BrowserRouter>
+              {/* 404 Route */}
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </BrowserRouter>
+        )}
         <Toaster theme="dark" position="top-right" closeButton richColors />
       </AuthProvider>
     </QueryClientProvider>
