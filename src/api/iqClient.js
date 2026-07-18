@@ -69,7 +69,7 @@ class MockEntity {
         const valA = item[key];
         const valB = criteria[key];
         if (typeof valA === 'string' && typeof valB === 'string') {
-          if (valA.toLowerCase() !== valB.toLowerCase()) return false;
+          if (valA.trim().toLowerCase() !== valB.trim().toLowerCase()) return false;
         } else {
           if (valA !== valB) return false;
         }
@@ -100,7 +100,21 @@ const getMockUsers = () => {
     if (localStorage.getItem('iq_users')) {
       users = JSON.parse(localStorage.getItem('iq_users') || '[]');
     }
-    const hasAkshay = users.some(u => u.email.toLowerCase() === 'akshaymatlapelly@gmail.com');
+    // Normalize existing data to fix any old users with whitespace or capitalization issues
+    let changed = false;
+    users = users.map(u => {
+      if (u.email && (u.email !== u.email.trim().toLowerCase())) {
+        u.email = u.email.trim().toLowerCase();
+        changed = true;
+      }
+      if (u.password && (u.password !== u.password.trim())) {
+        u.password = u.password.trim();
+        changed = true;
+      }
+      return u;
+    });
+
+    const hasAkshay = users.some(u => u.email === 'akshaymatlapelly@gmail.com');
     if (!hasAkshay) {
       users.push({
         id: 'default-user-id-akshay',
@@ -109,6 +123,9 @@ const getMockUsers = () => {
         full_name: 'M Akshay',
         created_date: new Date().toISOString()
       });
+      changed = true;
+    }
+    if (changed) {
       localStorage.setItem('iq_users', JSON.stringify(users));
     }
     return users;
@@ -133,7 +150,17 @@ const initializeDefaultData = () => {
     if (localStorage.getItem('iq_profiles')) {
       profiles = JSON.parse(localStorage.getItem('iq_profiles') || '[]');
     }
-    const hasAkshayProfile = profiles.some(p => p.email.toLowerCase() === 'akshaymatlapelly@gmail.com');
+    // Normalize existing profiles
+    let changed = false;
+    profiles = profiles.map(p => {
+      if (p.email && (p.email !== p.email.trim().toLowerCase())) {
+        p.email = p.email.trim().toLowerCase();
+        changed = true;
+      }
+      return p;
+    });
+
+    const hasAkshayProfile = profiles.some(p => p.email === 'akshaymatlapelly@gmail.com');
     if (!hasAkshayProfile) {
       profiles.push({
         id: 'default-profile-id-akshay',
@@ -163,6 +190,9 @@ const initializeDefaultData = () => {
           sample_questions: ["Explain the difference between Virtual DOM and Real DOM in React", "How does Node.js handle asynchronous operations?"]
         })
       });
+      changed = true;
+    }
+    if (changed) {
       localStorage.setItem('iq_profiles', JSON.stringify(profiles));
     }
   } catch (e) {
