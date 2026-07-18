@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../lib/AuthContext';
 import { iqClient } from '../api/iqClient';
 import { extractResumeText } from '../utils/resumeParser';
@@ -77,7 +77,7 @@ export default function ResumeCenter() {
 
   // Load saved analysis on mount / profile change
   useEffect(() => {
-    if (profile?.resume_analysis) {
+    if (profile?.resume_analysis && profile?.resume_url) {
       try { setAnalysis(JSON.parse(profile.resume_analysis)); } catch {}
     } else {
       setAnalysis(null);
@@ -87,6 +87,9 @@ export default function ResumeCenter() {
       // Restore locally stored file data
       const saved = localStorage.getItem(getFileKey());
       if (saved) setFileDataUrl(saved);
+    } else {
+      setFileName('');
+      setFileDataUrl(null);
     }
   }, [profile]);
 

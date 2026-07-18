@@ -431,13 +431,15 @@ export const iqClient = {
         
         // Match prompt contents to generate realistic mock AI text/JSON
         
-        // Question generation â€” matches both old and new prompt formats
+        // Question generation — matches both old and new prompt formats
         if (
-          prompt.includes("interview questions") ||
+          (prompt.includes("interview questions") ||
           prompt.includes("exactly 9") ||
           prompt.includes("PERSONALISED") ||
           prompt.includes("Target role") ||
-          prompt.includes("Core skills declared")
+          prompt.includes("Core skills declared")) &&
+          !prompt.includes("roadmap") &&
+          !prompt.includes("timeline")
         ) {
           // Extract role and skills from prompt for personalised questions
           let role = 'Software Developer';
@@ -448,65 +450,11 @@ export const iqClient = {
             const skillMatch = prompt.match(/Core skills declared:\s*([^\n]+)/);
             if (skillMatch) skills = skillMatch[1].split(',').map(s => s.trim()).filter(Boolean);
           } catch(e) {}
-
+          
           let lang = 'English';
           if (prompt.includes("Hindi")) lang = 'Hindi';
           else if (prompt.includes("Telugu")) lang = 'Telugu';
           else if (prompt.includes("Tamil")) lang = 'Tamil';
-
-          if (lang === 'Hindi') {
-            return {
-              text: JSON.stringify({
-                questions: [
-                  "React à¤®à¥‡à¤‚ à¤µà¤°à¥à¤šà¥à¤…à¤² DOM à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ à¤”à¤° à¤¯à¤¹ à¤¡à¤¾à¤¯à¤°à¥‡à¤•à¥à¤Ÿ DOM à¤®à¥ˆà¤¨à¤¿à¤ªà¥à¤²à¥‡à¤¶à¤¨ à¤•à¥€ à¤¤à¥à¤²à¤¨à¤¾ à¤®à¥‡à¤‚ à¤ªà¤°à¤«à¥‰à¤°à¥à¤®à¥‡à¤‚à¤¸ à¤•à¥‹ à¤•à¥ˆà¤¸à¥‡ à¤¬à¥‡à¤¹à¤¤à¤° à¤¬à¤¨à¤¾à¤¤à¤¾ à¤¹à¥ˆ?",
-                  "à¤†à¤ª à¤à¤• à¤¬à¤¡à¤¼à¥‡ React à¤à¤ªà¥à¤²à¤¿à¤•à¥‡à¤¶à¤¨ à¤®à¥‡à¤‚ à¤•à¤‚à¤ªà¥‹à¤¨à¥‡à¤‚à¤Ÿ-à¤²à¥‡à¤µà¤² à¤¬à¤¨à¤¾à¤® à¤—à¥à¤²à¥‹à¤¬à¤² à¤¸à¥à¤Ÿà¥‡à¤Ÿ à¤•à¥‹ à¤•à¥ˆà¤¸à¥‡ à¤®à¥ˆà¤¨à¥‡à¤œ à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚?",
-                  "à¤¸à¥‰à¤«à¥à¤Ÿà¤µà¥‡à¤¯à¤° à¤ªà¥à¤°à¥‹à¤œà¥‡à¤•à¥à¤Ÿà¥à¤¸ à¤®à¥‡à¤‚ à¤°à¤¿à¤ªà¥‰à¤œà¤¿à¤Ÿà¤°à¥€ à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¿à¤¤ à¤°à¤–à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤†à¤ª à¤•à¥Œà¤¨ à¤¸à¥‡ à¤Ÿà¥‚à¤²à¥à¤¸ à¤¯à¤¾ à¤¬à¥‡à¤¸à¥à¤Ÿ à¤ªà¥à¤°à¥ˆà¤•à¥à¤Ÿà¤¿à¤¸à¥‡à¤œ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚?",
-                  "à¤ªà¤°à¤¿à¤¦à¥ƒà¤¶à¥à¤¯: à¤°à¤¿à¤²à¥€à¤œ à¤¸à¥‡ à¤ à¥€à¤• à¤ªà¤¹à¤²à¥‡ à¤†à¤ªà¤•à¤¾ à¤à¤• à¤ªà¥à¤°à¤®à¥à¤– à¤«à¥€à¤šà¤° à¤•à¥à¤°à¥ˆà¤¶ à¤¹à¥‹ à¤œà¤¾à¤¤à¤¾ à¤¹à¥ˆà¥¤ à¤…à¤ªà¤¨à¥€ à¤¡à¤¿à¤¬à¤—à¤¿à¤‚à¤— à¤ªà¥à¤°à¤•à¥à¤°à¤¿à¤¯à¤¾ à¤¸à¤®à¤à¤¾à¤à¤‚à¥¤",
-                  "à¤ªà¤°à¤¿à¤¦à¥ƒà¤¶à¥à¤¯: à¤†à¤ªà¤•à¥‹ à¤¬à¤¿à¤¨à¤¾ à¤¡à¥‰à¤•à¥à¤¯à¥‚à¤®à¥‡à¤‚à¤Ÿà¥‡à¤¶à¤¨ à¤µà¤¾à¤²à¥‡ à¤à¤• à¤ªà¥à¤°à¤¾à¤¨à¥‡ à¤®à¥‰à¤¡à¥à¤¯à¥‚à¤² à¤•à¥‹ à¤°à¥€à¤«à¥ˆà¤•à¥à¤Ÿà¤° à¤•à¤°à¤¨à¤¾ à¤¹à¥ˆà¥¤ à¤†à¤ª à¤‡à¤¸à¥‡ à¤•à¥ˆà¤¸à¥‡ à¤¶à¥à¤°à¥‚ à¤•à¤°à¥‡à¤‚à¤—à¥‡?",
-                  "à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤®à¥à¤à¥‡ à¤•à¤¿à¤¸à¥€ à¤à¤¸à¥‡ à¤¸à¤®à¤¯ à¤•à¥‡ à¤¬à¤¾à¤°à¥‡ à¤®à¥‡à¤‚ à¤¬à¤¤à¤¾ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆà¤‚ à¤œà¤¬ à¤†à¤ªà¤•à¤¾ à¤•à¤¿à¤¸à¥€ à¤Ÿà¥€à¤® à¤®à¥‡à¤‚à¤¬à¤° à¤•à¥‡ à¤¸à¤¾à¤¥ à¤¤à¤•à¤¨à¥€à¤•à¥€ à¤®à¤¤à¤­à¥‡à¤¦ à¤¥à¤¾?",
-                  "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤…à¤ªà¤¨à¤¾ à¤ªà¤°à¤¿à¤šà¤¯ à¤¦à¥‡à¤‚ à¤”à¤° à¤‰à¤¸ à¤ªà¥à¤°à¥‹à¤œà¥‡à¤•à¥à¤Ÿ à¤•à¥‡ à¤¬à¤¾à¤°à¥‡ à¤®à¥‡à¤‚ à¤¬à¤¤à¤¾à¤à¤‚ à¤œà¤¿à¤¸à¥‡ à¤†à¤ªà¤¨à¥‡ à¤¬à¤¨à¤¾à¤¯à¤¾ à¤¹à¥ˆ à¤”à¤° à¤œà¤¿à¤¸ à¤ªà¤° à¤†à¤ªà¤•à¥‹ à¤¸à¤¬à¤¸à¥‡ à¤œà¥à¤¯à¤¾à¤¦à¤¾ à¤—à¤°à¥à¤µ à¤¹à¥ˆà¥¤",
-                  "à¤†à¤ª à¤…à¤—à¤²à¥‡ à¤¦à¥‹ à¤µà¤°à¥à¤·à¥‹à¤‚ à¤®à¥‡à¤‚ à¤–à¥à¤¦ à¤•à¥‹ à¤¤à¤•à¤¨à¥€à¤•à¥€ à¤°à¥‚à¤ª à¤¸à¥‡ à¤•à¤¹à¤¾à¤ à¤µà¤¿à¤•à¤¸à¤¿à¤¤ à¤¹à¥‹à¤¤à¥‡ à¤¦à¥‡à¤–à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚?",
-                  "à¤†à¤ª à¤‡à¤¸ à¤µà¤¿à¤¶à¤¿à¤·à¥à¤Ÿ à¤­à¥‚à¤®à¤¿à¤•à¤¾ à¤®à¥‡à¤‚ à¤•à¥à¤¯à¥‹à¤‚ à¤°à¥à¤šà¤¿ à¤°à¤–à¤¤à¥‡ à¤¹à¥ˆà¤‚ à¤”à¤° à¤†à¤ª à¤¹à¤®à¤¾à¤°à¥‡ à¤¸à¤¾à¤¥ à¤•à¥ˆà¤¸à¥‡ à¤¯à¥‹à¤—à¤¦à¤¾à¤¨ à¤¦à¥‡ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆà¤‚?"
-                ]
-              })
-            };
-          }
-
-          if (lang === 'Telugu') {
-            return {
-              text: JSON.stringify({
-                questions: [
-                  "React à°²à±‹ à°µà°°à±à°šà±à°µà°²à± DOM à°…à°‚à°Ÿà±‡ à°à°®à°¿à°Ÿà°¿ à°®à°°à°¿à°¯à± à°‡à°¦à°¿ à°¡à±ˆà°°à±†à°•à±à°Ÿà± DOM à°¤à±‹ à°ªà±‹à°²à°¿à°¸à±à°¤à±‡ à°ªà°¨à°¿à°¤à±€à°°à±à°¨à± à°Žà°²à°¾ à°®à±†à°°à±à°—à±à°ªà°°à±à°¸à±à°¤à±à°‚à°¦à°¿?",
-                  "à°ªà±†à°¦à±à°¦ React à°…à°ªà±à°²à°¿à°•à±‡à°·à°¨à±â€Œà°²à±‹ à°•à°¾à°‚à°ªà±‹à°¨à±†à°‚à°Ÿà±-à°²à±†à°µà°²à± à°®à°°à°¿à°¯à± à°—à±à°²à±‹à°¬à°²à± à°¸à±à°Ÿà±‡à°Ÿà±â€Œà°¨à± à°®à±€à°°à± à°Žà°²à°¾ à°®à±‡à°¨à±‡à°œà± à°šà±‡à°¸à±à°¤à°¾à°°à±?",
-                  "à°¸à°¾à°«à±à°Ÿà±â€Œà°µà±‡à°°à± à°¡à±†à°µà°²à°ªà±â€Œà°®à±†à°‚à°Ÿà±â€Œà°²à±‹ à°µà±†à°°à±à°·à°¨à± à°•à°‚à°Ÿà±à°°à±‹à°²à± à°®à°°à°¿à°¯à± à°•à±‹à°¡à± à°°à°¿à°µà±à°¯à±‚à°² à°ªà±à°°à°¾à°§à°¾à°¨à±à°¯à°¤ à°à°®à°¿à°Ÿà°¿?",
-                  "à°¸à°‚à°¦à°°à±à°­à°‚: à°®à±€ à°•à±Šà°¤à±à°¤ à°«à±€à°šà°°à± à°ªà±à°°à±Šà°¡à°•à±à°·à°¨à±â€Œà°²à±‹ à°¬à±à°°à±‡à°•à± à°…à°¯à°¿à°¨à°ªà±à°ªà±à°¡à± à°®à±€à°°à± à°¦à°¾à°¨à±à°¨à°¿ à°Žà°²à°¾ à°¡à±€à°¬à°—à± à°šà±‡à°¸à±à°¤à°¾à°°à±?",
-                  "à°¸à°‚à°¦à°°à±à°­à°‚: à°¡à°¾à°•à±à°¯à±à°®à±†ãƒ³ãƒ†à°·à°¨à± à°²à±‡à°¨à°¿ à°ªà°¾à°¤ à°¸à°¿à°¸à±à°Ÿà°®à±â€Œà°¨à± à°°à±€à°«à°¾à°•à±à°Ÿà°°à± à°šà±‡à°¯à°¡à°¾à°¨à°¿à°•à°¿ à°®à±€à°°à± à° à°ªà±à°²à°¾à°¨à± à°…à°¨à±à°¸à°°à°¿à°¸à±à°¤à°¾à°°à±?",
-                  "à°¸à°¹à±‹à°¦à±à°¯à±‹à°—à±à°²à°¤à±‹ à°¸à°¾à°‚à°•à±‡à°¤à°¿à°• à°µà°¿à°­à±‡à°¦à°¾à°²à± à°µà°šà±à°šà°¿à°¨à°ªà±à°ªà±à°¡à± à°µà°¾à°Ÿà°¿à°¨à°¿ à°Žà°²à°¾ à°ªà°°à°¿à°·à±à°•à°°à°¿à°‚à°šà±à°•à±à°‚à°Ÿà°¾à°°à±?",
-                  "à°®à±€ à°ªà±à°°à°¾à°œà±†à°•à±à°Ÿà± à°…à°¨à±à°­à°µà°‚ à°—à±à°°à°¿à°‚à°šà°¿ à°®à°°à°¿à°¯à± à°®à±€à°°à± à°Žà°¦à±à°°à±à°•à±Šà°¨à±à°¨ à°¸à°µà°¾à°³à±à°² à°—à±à°°à°¿à°‚à°šà°¿ à°•à±à°²à±à°ªà±à°¤à°‚à°—à°¾ à°µà°¿à°µà°°à°¿à°‚à°šà°‚à°¡à°¿.",
-                  "à°°à°¾à°¬à±‹à°¯à±‡ à°°à±†à°‚à°¡à±‡à°³à±à°²à°²à±‹ à°®à±€ à°¸à°¾à°‚à°•à±‡à°¤à°¿à°• à°ªà±à°°à°¯à°¾à°£à°‚ à° à°µà°¿à°§à°‚à°—à°¾ à°‰à°‚à°¡à°¾à°²à°¨à°¿ à°†à°¶à°¿à°¸à±à°¤à±à°¨à±à°¨à°¾à°°à±?",
-                  "à°ˆ à°‰à°¦à±à°¯à±‹à°—à°‚ à°ªà°Ÿà±à°² à°®à±€à°•à± à°†à°¸à°•à±à°¤à°¿ à°•à°²à°—à°¡à°¾à°¨à°¿à°•à°¿ à°ªà±à°°à°§à°¾à°¨ à°•à°¾à°°à°£à°‚ à°à°®à°¿à°Ÿà°¿?"
-                ]
-              })
-            };
-          }
-
-          if (lang === 'Tamil') {
-            return {
-              text: JSON.stringify({
-                questions: [
-                  "React à®‡à®²à¯ à®®à¯†à®¯à¯à®¨à®¿à®•à®°à¯ DOM à®Žà®©à¯à®±à®¾à®²à¯ à®Žà®©à¯à®©, à®…à®¤à¯ à®¨à¯‡à®°à®Ÿà®¿ DOM à® à®µà®¿à®Ÿ à®šà¯†à®¯à®²à¯à®¤à®¿à®±à®©à¯ˆ à®Žà®µà¯à®µà®¾à®±à¯ à®®à¯‡à®®à¯à®ªà®Ÿà¯à®¤à¯à®¤à¯à®•à®¿à®±à®¤à¯?",
-                  "à®’à®°à¯ à®ªà¯†à®°à®¿à®¯ React à®ªà®¯à®©à¯à®ªà®¾à®Ÿà¯à®Ÿà®¿à®²à¯ à®•à¯‚à®±à¯-à®¨à®¿à®²à¯ˆ à®®à®±à¯à®±à¯à®®à¯ à®‰à®²à®•à®³à®¾à®µà®¿à®¯ à®¨à®¿à®²à¯ˆà®¯à¯ˆ à®Žà®µà¯à®µà®¾à®±à¯ à®¨à®¿à®°à¯à®µà®•à®¿à®•à¯à®•à®¿à®±à¯€à®°à¯à®•à®³à¯?",
-                  "à®®à¯†à®©à¯à®ªà¯Šà®°à¯à®³à¯ à®¤à®¿à®Ÿà¯à®Ÿà®™à¯à®•à®³à®¿à®²à¯ à®ªà®¤à®¿à®ªà¯à®ªà¯ à®•à®Ÿà¯à®Ÿà¯à®ªà¯à®ªà®¾à®Ÿà¯à®Ÿà¯à®•à¯à®•à®¾à®© à®šà®¿à®±à®¨à¯à®¤ à®¨à®Ÿà¯ˆà®®à¯à®±à¯ˆà®•à®³à¯ à®¯à®¾à®µà¯ˆ?",
-                  "à®šà¯‚à®´à¯à®¨à®¿à®²à¯ˆ: à®µà¯†à®³à®¿à®¯à¯€à®Ÿà¯à®Ÿà®¿à®±à¯à®•à¯ à®šà®±à¯à®±à¯ à®®à¯à®©à¯à®ªà¯ à®‰à®™à¯à®•à®³à¯ à®…à®®à¯à®šà®®à¯ à®šà¯†à®¯à®²à®¿à®´à®¨à¯à®¤à®¾à®²à¯ à®…à®¤à¯ˆ à®Žà®µà¯à®µà®¾à®±à¯ à®šà®°à®¿à®šà¯†à®¯à¯à®µà¯€à®°à¯à®•à®³à¯?",
-                  "à®šà¯‚à®´à¯à®¨à®¿à®²à¯ˆ: à®†à®µà®£à®™à¯à®•à®³à¯ à®‡à®²à¯à®²à®¾à®¤ à®’à®°à¯ à®ªà®´à¯ˆà®¯ à®¤à¯Šà®•à¯à®¤à®¿à®¯à¯ˆ à®®à¯€à®£à¯à®Ÿà¯à®®à¯ à®•à®Ÿà¯à®Ÿà®®à¯ˆà®•à¯à®• à®¨à¯€à®™à¯à®•à®³à¯ à®Žà®©à¯à®© à®šà¯†à®¯à¯à®µà¯€à®°à¯à®•à®³à¯?",
-                  "à®‰à®™à¯à®•à®³à¯à®•à¯à®•à¯ à®šà®• à®Šà®´à®¿à®¯à®°à¯à®Ÿà®©à¯ à®¤à¯Šà®´à®¿à®²à¯à®¨à¯à®Ÿà¯à®ª à®•à®°à¯à®¤à¯à®¤à¯ à®µà¯‡à®±à¯à®ªà®¾à®Ÿà¯ à®à®±à¯à®ªà®Ÿà¯à®Ÿà®ªà¯‹à®¤à¯ à®…à®¤à¯ˆ à®Žà®µà¯à®µà®¾à®±à¯ à®¤à¯€à®°à¯à®¤à¯à®¤à¯€à®°à¯à®•à®³à¯?",
-                  "à®‰à®™à¯à®•à®³à¯ˆ à®…à®±à®¿à®®à¯à®•à®ªà¯à®ªà®Ÿà¯à®¤à¯à®¤à®¿à®•à¯ à®•à¯Šà®£à¯à®Ÿà¯, à®¨à¯€à®™à¯à®•à®³à¯ à®‰à®°à¯à®µà®¾à®•à¯à®•à®¿à®¯ à®®à®¿à®•à®šà¯à®šà®¿à®±à®¨à¯à®¤ à®¤à®¿à®Ÿà¯à®Ÿà®¤à¯à®¤à¯ˆ à®µà®¿à®µà®°à®¿à®•à¯à®•à®µà¯à®®à¯.",
-                  "à®…à®Ÿà¯à®¤à¯à®¤ à®‡à®°à®£à¯à®Ÿà¯ à®†à®£à¯à®Ÿà¯à®•à®³à®¿à®²à¯ à®‰à®™à¯à®•à®³à¯ˆ à®¤à¯Šà®´à®¿à®²à¯à®¨à¯à®Ÿà¯à®ª à®°à¯€à®¤à®¿à®¯à®¾à®• à®Žà®™à¯à®•à¯ à®ªà®¾à®°à¯à®•à¯à®• à®µà®¿à®°à¯à®®à¯à®ªà¯à®•à®¿à®±à¯€à®°à¯à®•à®³à¯?",
-                  "à®‡à®¨à¯à®¤ à®•à¯à®±à®¿à®ªà¯à®ªà®¿à®Ÿà¯à®Ÿ à®µà¯‡à®²à¯ˆà®•à¯à®•à¯ à®¨à¯€à®™à¯à®•à®³à¯ à®à®©à¯ à®µà®¿à®£à¯à®£à®ªà¯à®ªà®¿à®¤à¯à®¤à¯€à®°à¯à®•à®³à¯ à®®à®±à¯à®±à¯à®®à¯ à®‰à®™à¯à®•à®³à®¿à®©à¯ à®®à¯à®•à¯à®•à®¿à®¯ à®ªà®²à®®à¯ à®Žà®©à¯à®©?"
-                ]
-              })
-            };
-          }
 
           const isFrontend = skills.some(s => /react|html|css|vue|next/i.test(s)) || /front/i.test(role);
           const isData     = skills.some(s => /python|sql|pandas|ml|tensorflow/i.test(s)) || /data/i.test(role);
@@ -525,7 +473,7 @@ export const iqClient = {
             `Walk me through how you would design a data processing pipeline for a large-scale dataset.`,
           ] : isBackend ? [
             `How do you design a RESTful API with proper error handling and authentication using ${skill1}?`,
-            `Explain the differences between SQL and NoSQL databases â€” when would you pick each?`,
+            `Explain the differences between SQL and NoSQL databases — when would you pick each?`,
             `How do you handle rate limiting and security in a ${role} backend service?`,
           ] : [
             `Walk me through how you would architect a scalable system for a ${role} position.`,
@@ -533,23 +481,101 @@ export const iqClient = {
             `Describe your approach to debugging a critical production issue in a ${skill1} environment.`,
           ];
 
+          const rawList = [
+            ...techQs,
+            `Scenario: Your ${skill1} feature breaks in production right before a release. Walk me through your debugging and communication process.`,
+            `Scenario: You are asked to refactor a legacy ${skill2} module with no documentation and tight deadline. How do you approach it?`,
+            `Tell me about a time you had a technical disagreement with a teammate. How did you resolve it?`,
+            `Describe a project you built using ${skill1} that you are most proud of. What trade-offs did you make?`,
+            `What draws you specifically to the ${role} role, and how do your skills in ${skill1} prepare you for it?`,
+            `Where do you see yourself growing technically in the next two years, and what skills are you actively building?`,
+          ];
+
+          // Dynamic Translation Helper
+          const translateQuestions = (qs, l) => {
+            if (l === 'Hindi') {
+              return qs.map(q => {
+                if (q.includes("Explain the virtual DOM in React")) return "React में वर्चुअल DOM क्या है और यह डायरेक्ट DOM मैनिपुलेशन की तुलना में परफॉरमेंस को कैसे बेहतर बनाता है?";
+                if (q.includes("manage component-level vs. global state")) return `आप एक बड़े ${skill2} एप्लीकेशन में कंपोनेंट-लेवल बनाम ग्लोबल स्टेट को कैसे मैनेज करते हैं?`;
+                if (q.includes("cross-browser compatibility issues")) return `जब आप ${skill3} का उपयोग कर रहे हों, तो आप क्रॉस-ब्राउज़र कम्पेटिबिलिटी समस्याओं को कैसे हल करते हैं?`;
+                if (q.includes("supervised and unsupervised learning")) return "सुपरवाइज्ड (Supervised) और अनसुपरवाइज्ड (Unsupervised) लर्निंग में क्या अंतर है? अपने किसी प्रोजेक्ट से उदाहरण देकर समझाएं।";
+                if (q.includes("handle missing or skewed data")) return `आप मॉडल ट्रेनिंग से पहले ${skill1} पाइपलाइन में मिसिंग या स्केव्ड (Skewed) डेटा को कैसे हैंडल करते हैं?`;
+                if (q.includes("design a data processing pipeline")) return "बड़े पैमाने के डेटासेट के लिए आप डेटा प्रोसेसिंग पाइपलाइन को कैसे डिज़ाइन करेंगे? मुझे समझाएं।";
+                if (q.includes("design a RESTful API with proper error handling")) return `आप ${skill1} का उपयोग करके एरर हैंडलिंग और ऑथेंटिकेशन के साथ एक RESTful API को कैसे डिज़ाइन करते हैं?`;
+                if (q.includes("differences between SQL and NoSQL")) return "SQL और NoSQL डेटाबेस में क्या मुख्य अंतर हैं — आप किसे कब चुनेंगे?";
+                if (q.includes("handle rate limiting and security")) return `आप एक ${role} बैकएंड सर्विस में रेट लिमिटिंग (Rate Limiting) और सिक्योरिटी को कैसे हैंडल करते हैं?`;
+                if (q.includes("architect a scalable system")) return `आप एक ${role} पोजीशन के लिए एक स्केलेबल सिस्टम को कैसे आर्किटेक्ट करेंगे?`;
+                if (q.includes("performance bottlenecks")) return `आप ${skill1} एप्लीकेशंस में परफॉरमेंस बॉटलनेक (Performance Bottlenecks) को कैसे हल करते हैं?`;
+                if (q.includes("debugging a critical production issue")) return `एक ${skill1} एनवायरनमेंट में किसी क्रिटिकल प्रोडक्शन समस्या को डिबग करने के लिए आपका क्या नजरिया रहता है?`;
+                if (q.includes("feature breaks in production")) return `परिदृश्य: रिलीज से ठीक पहले आपका एक ${skill1} फीचर प्रोडक्शन में क्रैश हो जाता है। अपनी डिबगिंग और टीम कम्युनिकेशन की प्रक्रिया समझाएं।`;
+                if (q.includes("refactor a legacy")) return `परिदृश्य: आपको बिना डॉक्यूमेंटेशन और सख्त समय-सीमा वाले एक पुराने ${skill2} मॉड्यूल को रीफैक्टर करना है। आप इसे कैसे शुरू करेंगे?`;
+                if (q.includes("technical disagreement")) return "क्या आप मुझे किसी ऐसे समय के बारे में बता सकते हैं जब आपका किसी टीम मेंबर के साथ तकनीकी मतभेद था? आपने इसे कैसे हल किया?";
+                if (q.includes("most proud of")) return `कृपया ${skill1} का उपयोग करके बनाए गए किसी ऐसे प्रोजेक्ट के बारे में बताएं जिस पर आपको सबसे ज्यादा गर्व है। आपने इसमें क्या ट्रेड-ऑफ किए?`;
+                if (q.includes("draws you specifically")) return `आप विशेष रूप से इस ${role} भूमिका की ओर क्यों आकर्षित हुए हैं, और ${skill1} में आपके कौशल आपको इसके लिए कैसे तैयार करते हैं?`;
+                if (q.includes("growing technically")) return "आप अगले दो वर्षों में खुद को तकनीकी रूप से कहाँ विकसित होते देखना चाहते हैं, और आप वर्तमान में कौन से कौशल सीख रहे हैं?";
+                return q;
+              });
+            }
+            if (l === 'Telugu') {
+              return qs.map(q => {
+                if (q.includes("Explain the virtual DOM in React")) return "React లో వర్చువల్ DOM అంటే ఏమిటి మరియు ఇది డైరెక్ట్ DOM తో పోలిస్తే పనితీరును ఎలా మెరుగుపరుస్తుంది?";
+                if (q.includes("manage component-level vs. global state")) return `పెద్ద ${skill2} అప్లికేషన్లలో కాంపోనెంట్-లెవల్ మరియు గ్లోబల్ స్టేట్‌ను మీరు ఎలా మేనేజ్ చేస్తారు?`;
+                if (q.includes("cross-browser compatibility issues")) return `మీరు ${skill3} ఉపయోగించేటప్పుడు వచ్చే క్రాస్-బ్రాౌజర్ ఇష్యూలను ఎలా పరిష్కరిస్తారు?`;
+                if (q.includes("supervised and unsupervised learning")) return "సూపర్‌వైజ్డ్ మరియు అన్‌సూపర్‌వైజ్డ్ లెర్నింగ్ మధ్య తేడాలను మీ ప్రాజెక్ట్ ఉదాహరణతో వివరించండి.";
+                if (q.includes("handle missing or skewed data")) return `మోడల్ ట్రైనింగ్‌కు ముందు ${skill1} పైప్‌లైన్‌లో మిస్సింగ్ లేదా స్కూడ్ (skewed) డేటాను ఎలా హ్యాండిల్ చేస్తారు?`;
+                if (q.includes("design a data processing pipeline")) return "పెద్ద ఎత్తున ఉన్న డేటాసెట్ కోసం డేటా ప్రాసెసింగ్ పైప్‌లైన్‌ను ఎలా డిజైన్ చేస్తారో వివరించండి.";
+                if (q.includes("design a RESTful API with proper error handling")) return `${skill1} ఉపయోగించి ప్రాపర్ ఎర్రర్ హ్యాండ్లింగ్ మరియు ఆథెంటికేషన్‌తో కూడిన RESTful API ని ఎలా డిజైన్ చేస్తారు?`;
+                if (q.includes("differences between SQL and NoSQL")) return "SQL మరియు NoSQL డేటాబేస్ ల మధ్య తేడాలు ఏమిటి — దేనిని ఎప్పుడు ఎంచుకుంటారు?";
+                if (q.includes("handle rate limiting and security")) return `ఒక ${role} బ్యాకెండ్ సర్వీస్ లో రేట్ లిమిటింగ్ మరియు సెక్యూరిటీని ఎలా హ్యాండిల్ చేస్తారు?`;
+                if (q.includes("architect a scalable system")) return `ఒక ${role} ఉద్యోగం కోసం స్కేలబుల్ సిస్టమ్‌ను ఎలా ఆర్కిటెక్ట్ చేస్తారో చెప్పండి.`;
+                if (q.includes("performance bottlenecks")) return `${skill1} అప్లికేషన్లలో పెర్ఫార్మెన్స్ బాటిల్‌నెక్‌లను మీరు ఎలా గుర్తిస్తారు మరియు పరిష్కరిస్తారు?`;
+                if (q.includes("debugging a critical production issue")) return `${skill1} ఎన్విరాన్మెంట్‌లో క్లిష్టమైన ప్రొడక్షన్ ఇష్యూను డీబగ్ చేయడానికి మీ పద్ధతి ఏమిటి?`;
+                if (q.includes("feature breaks in production")) return `సందర్భం: రిలీజ్ కాబోయే ముందు ప్రొడక్షన్ లో మీ ${skill1} ఫీచర్ బ్రేక్ అయితే, మీ డీబగ్గింగ్ మరియు టీమ్ కమ్యూనికేషన్ పద్ధతిని వివరించండి.`;
+                if (q.includes("refactor a legacy")) return `సందర్భం: ఎలాంటి డాక్యుమెンテషన్ లేని మరియు టైట్ డెడ్‌లైన్ ఉన్న ఒక పాత ${skill2} మోడ్యూల్‌ను రీఫాక్టర్ చేయడానికి మీరు ఏ విధంగా ప్లాన్ చేస్తారు?`;
+                if (q.includes("technical disagreement")) return "మీ టీమ్ మెంబర్‌తో సాంకేతిక పరమైన విభేదాలు వచ్చిన సందర్భాన్ని మరియు దానిని ఎలా పరిష్కరించారో చెప్పండి.";
+                if (q.includes("most proud of")) return `${skill1} తో మీరు చేసిన ప్రాజెక్ట్‌లలో మీకు బాగా గర్వకారణమైన దాని గురించి మరియు అందులో ఫేస్ చేసిన ట్రేడ్-ఆఫ్స్ గురించి చెప్పండి.`;
+                if (q.includes("draws you specifically")) return `ప్రత్యేకంగా ఈ ${role} రోల్ లో చేరడానికి మిమ్మల్ని ఏది ఆకర్షించింది, మరియు ${skill1} స్కిల్స్ దీనికి మిమ్మల్ని ఎలా సిద్ధం చేశాయి?`;
+                if (q.includes("growing technically")) return "రాబోయే రెండేళ్లలో టెక్నికల్‌గా మిమ్మల్ని ఆశించిన ఏ స్థానంలో చూడాలనుకుంటున్నారు, మరియు ఏ కొత్త స్కిల్స్ నేర్చుకుంటున్నారు?";
+                return q;
+              });
+            }
+            if (l === 'Tamil') {
+              return qs.map(q => {
+                if (q.includes("Explain the virtual DOM in React")) return "React இல் மெய்நிகர் DOM என்றால் என்ன, அது நேரடி DOM உடன் ஒப்பிடும்போது செயல்திறனை எவ்வாறு மேம்படுத்துகிறது?";
+                if (q.includes("manage component-level vs. global state")) return `ஒரு பெரிய ${skill2} பயன்பாட்டில் கூறு-நிலை மற்றும் உலகளாவிய நிலையை எவ்வாறு நிர்வகிப்பீர்கள்?`;
+                if (q.includes("cross-browser compatibility issues")) return `${skill3} பயன்படுத்தும்போது ஏற்படும் கிராஸ்-பிரவுசர் இணக்கத்தன்மை சிக்கல்களை எவ்வாறு கையாளுவீர்கள்?`;
+                if (q.includes("supervised and unsupervised learning")) return "மேற்பார்வையிடப்பட்ட மற்றும் மேற்பார்வையிடப்படாத கற்றலுக்கு இடையே உள்ள வேறுபாடுகளை உங்கள் திட்ட உதாரணத்துடன் விளக்குங்கள்.";
+                if (q.includes("handle missing or skewed data")) return `மாதிரி பயிற்சிக்கு முன் ${skill1} தரவுப்பாதையில் விடுபட்ட அல்லது சாய்ந்த தரவை எவ்வாறு கையாள்வீர்கள்?`;
+                if (q.includes("design a data processing pipeline")) return "பெரிய அளவிலான தரவுத்தொகுப்பிற்கான தரவு செயலாக்க குழாய்த்தொடரை எவ்வாறு வடிவமைப்பீர்கள் என்பதை விளக்குங்கள்.";
+                if (q.includes("design a RESTful API with proper error handling")) return `${skill1} ஐப் பயன்படுத்தி பிழை கையாளுதல் மற்றும் அங்கீகாரத்துடன் கூடிய RESTful API ஐ எவ்வாறு வடிவமைப்பீர்கள்?`;
+                if (q.includes("differences between SQL and NoSQL")) return "SQL மற்றும் NoSQL தரவுத்தளங்களுக்கு இடையே உள்ள வேறுபாடுகள் என்ன — எப்போது எதைத் தேர்ந்தெடுப்பீர்கள்?";
+                if (q.includes("handle rate limiting and security")) return `ஒரு ${role} பின்தள சேவையில் விகித வரம்பு மற்றும் பாதுகாப்பை எவ்வாறு கையாளுவீர்கள்?`;
+                if (q.includes("architect a scalable system")) return `ஒரு ${role} பதவிக்கான அளவிடக்கூடிய கணினி கட்டமைப்பை எவ்வாறு வடிவமைப்பீர்கள் என்று கூறுங்கள்.`;
+                if (q.includes("performance bottlenecks")) return `${skill1} பயன்பாடுகளில் செயல்திறன் தடைகளை எவ்வாறு கண்டறிந்து சரிசெய்வீர்கள்?`;
+                if (q.includes("debugging a critical production issue")) return `${skill1} சூழலில் முக்கியமான தயாரிப்பு சிக்கலை எவ்வாறு பிழைத்திருத்துவீர்கள்?`;
+                if (q.includes("feature breaks in production")) return `சூழ்நிலை: வெளியீட்டிற்கு சற்று முன் தயாரிப்பில் உங்கள் ${skill1} அம்சம் செயலிழந்தால், உங்கள் பிழைத்திருத்தம் மற்றும் குழு தொடர்பு முறையை விளக்குங்கள்.`;
+                if (q.includes("refactor a legacy")) return `சூழ்நிலை: ஆவணங்கள் இல்லாத மற்றும் இறுக்கமான காலக்கெடுவைக் கொண்ட ஒரு பழைய ${skill2} தொகுதியை எவ்வாறு மறுவடிவமைப்பீர்கள்?`;
+                if (q.includes("technical disagreement")) return "உங்கள் குழு உறுப்பினருடன் ஏற்பட்ட தொழில்நுட்ப கருத்து வேறுபாட்டை எவ்வாறு தீர்த்தீர்கள் என்று கூறுங்கள்.";
+                if (q.includes("most proud of")) return `${skill1} ஐப் பயன்படுத்தி நீங்கள் உருவாக்கிய திட்டங்களில் எதைப் பற்றி பெருமைப்படுகிறீர்கள் மற்றும் அதில் என்ன சமரசங்களைச் செய்தீர்கள்?`;
+                if (q.includes("draws you specifically")) return `குறிப்பாக இந்த ${role} பணியில் சேர உங்களை எது ஈர்த்தது, மற்றும் ${skill1} திறன்கள் உங்களை இதற்கு எவ்வாறு தயார்படுத்தின?`;
+                if (q.includes("growing technically")) return "அடுத்த இரண்டு ஆண்டுகளில் உங்களை தொழில்நுட்ப ரீதியாக எங்கு பார்க்க விரும்புகிறீர்கள், என்ன புதிய திறன்களைக் கற்றுக்கொள்கிறீர்கள்?";
+                return q;
+              });
+            }
+            return qs;
+          };
+
+          const translatedList = translateQuestions(rawList, lang);
+
           return {
             text: JSON.stringify({
-              questions: [
-                ...techQs,
-                `Scenario: Your ${skill1} feature breaks in production right before a release. Walk me through your debugging and communication process.`,
-                `Scenario: You are asked to refactor a legacy ${skill2} module with no documentation and tight deadline. How do you approach it?`,
-                `Tell me about a time you had a technical disagreement with a teammate. How did you resolve it?`,
-                `Describe a project you built using ${skill1} that you are most proud of. What trade-offs did you make?`,
-                `What draws you specifically to the ${role} role, and how do your skills in ${skill1} prepare you for it?`,
-                `Where do you see yourself growing technically in the next two years, and what skills are you actively building?`,
-              ]
+              questions: translatedList
             })
           };
         }
 
         // ATS resume parse
-        if (prompt.includes("ATS") || prompt.includes("parser") || prompt.includes("resume")) {
+        if ((prompt.includes("ATS") || prompt.includes("parser") || prompt.includes("resume")) && !prompt.includes("roadmap") && !prompt.includes("timeline")) {
           // Dynamically read profile skills for realistic suggestions
           let preferredRole = 'Software Developer';
           let skills = '';
