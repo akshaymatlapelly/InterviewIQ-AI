@@ -19,7 +19,8 @@ export function PricingSection() {
       cta: "Start Free",
       popular: false,
       border: "border-white/5",
-      badge: ""
+      hoverClass: "hover:border-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)]",
+      hoverScale: { y: -8, scale: 1.02 }
     },
     {
       name: "Professional",
@@ -36,7 +37,8 @@ export function PricingSection() {
       cta: "Upgrade to Pro",
       popular: true,
       border: "border-violet-500/40 relative",
-      badge: "bg-violet-600 text-white font-bold"
+      hoverClass: "hover:border-violet-400/80 hover:shadow-[0_0_35px_rgba(139,92,246,0.22)]",
+      hoverScale: { y: -12, scale: 1.03 }
     },
     {
       name: "Enterprise",
@@ -52,7 +54,8 @@ export function PricingSection() {
       cta: "Contact Sales",
       popular: false,
       border: "border-white/5",
-      badge: ""
+      hoverClass: "hover:border-cyan-500/45 hover:shadow-[0_0_30px_rgba(6,182,212,0.12)]",
+      hoverScale: { y: -8, scale: 1.02 }
     }
   ];
 
@@ -77,8 +80,14 @@ export function PricingSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`glass p-8 rounded-2xl border flex flex-col justify-between hover:shadow-xl hover:border-white/10 transition-all duration-300 ${p.border}`}
+              whileHover={p.hoverScale}
+              transition={{ 
+                type: "spring",
+                stiffness: 300,
+                damping: 20,
+                delay: i * 0.05
+              }}
+              className={`glass p-8 rounded-2xl border flex flex-col justify-between transition-all duration-300 cursor-pointer ${p.border} ${p.hoverClass}`}
             >
               {p.popular && (
                 <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold tracking-wider bg-violet-600 text-white shadow-lg uppercase">

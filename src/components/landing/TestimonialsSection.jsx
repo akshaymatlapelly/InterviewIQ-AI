@@ -45,11 +45,16 @@ export function TestimonialsSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass p-6 rounded-xl border border-white/5 flex flex-col justify-between gap-6 hover:border-white/10 transition-all duration-300"
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 300,
+                damping: 20
+              }}
+              className="glass p-6 rounded-xl border border-white/5 flex flex-col justify-between gap-6 hover:border-violet-500/30 hover:shadow-[0_0_30px_rgba(139,92,246,0.12)] transition-all duration-300 group cursor-pointer"
             >
               <div className="space-y-4">
-                <Quote className="w-8 h-8 text-violet-500/40" />
+                <Quote className="w-8 h-8 text-violet-500/40 group-hover:text-violet-400 group-hover:scale-110 transition-all duration-300" />
                 <p className="text-slate-300 text-sm leading-relaxed italic">
                   "{r.feedback}"
                 </p>
