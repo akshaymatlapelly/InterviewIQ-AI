@@ -1,0 +1,9 @@
+{
+  "name": "InterviewIQ RAG Knowledge Dataset",
+  "version": "1.0.0",
+  "format": "JSONL",
+  "record_count": 130,
+  "purpose": "Global interview knowledge base for Retrieval-Augmented Generation.",
+  "candidate_data": "Do not place candidate resumes, job descriptions, or private interview records here. Those must be ingested dynamically into candidate-specific namespaces.",
+  "indexing": "Point the Part 1 knowledge-base ingestion pipeline at backend/rag/data/ and index all .jsonl files."
+}
